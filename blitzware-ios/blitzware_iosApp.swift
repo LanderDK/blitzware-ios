@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct blitzware_iosApp: App {
+    let appViewModel = AppViewModel()
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(appViewModel)
         }
     }
 }

@@ -35,7 +35,7 @@ struct LoginView: View {
             }.padding(.bottom, 25)
             
             if viewModel.requestState == .error {
-                Text(viewModel.errorData!.message)
+                Text(viewModel.errorData?.message ?? "Unkown error")
                     .foregroundColor(.red)
                     .padding(.bottom, 25)
             }
@@ -69,6 +69,9 @@ struct LoginView: View {
 
 struct AuthenticatedView: View {
     @EnvironmentObject var viewModel: AppViewModel
+    @State private var isShowingAlert = false
+    @State private var alertTitle = ""
+    @State private var alertMessage = ""
     
     var body: some View {
         Text("Welcome back, \(viewModel.accountData!.account.username)")
@@ -76,7 +79,7 @@ struct AuthenticatedView: View {
             .padding()
         VStack {
             if viewModel.requestState == .error {
-                Text(viewModel.errorData!.message)
+                Text(viewModel.errorData?.message ?? "Unkown error")
                     .foregroundColor(.red)
             }
             if viewModel.requestState == .pending || viewModel.requestState == .sent {
@@ -84,13 +87,62 @@ struct AuthenticatedView: View {
             } else {
                 List(viewModel.applications, id: \.id) { application in
                     ApplicationRowView(application: application)
-                } 
+                        .contextMenu {
+                            CustomButton(title: "App-Panel") {
+                                Task {
+                                    await viewModel.login(username: "username", password: "password")
+                                }
+                            }
+                            if application.status == 1 {
+                                CustomButton(title: "Disable") {
+                                    let newApp = ApplicationData(id: application.id, name: application.name, secret: application.secret, status: 0, hwidCheck: application.hwidCheck, developerMode: application.developerMode, integrityCheck: application.integrityCheck, freeMode: application.freeMode, twoFactorAuth: application.twoFactorAuth, programHash: application.programHash, version: application.version, downloadLink: application.downloadLink, adminRoleId: application.adminRoleId, adminRoleLevel: application.adminRoleLevel)
+                                    Task {
+                                        await viewModel.updateApplicationById(application: newApp)
+                                    }
+                                    if let index = viewModel.applications.firstIndex(where: { $0.id == application.id }) {
+                                        viewModel.applications[index].status = 0
+                                    }
+                                }
+                            } else {
+                                CustomButton(title: "Enable") {
+                                    let newApp = ApplicationData(id: application.id, name: application.name, secret: application.secret, status: 1, hwidCheck: application.hwidCheck, developerMode: application.developerMode, integrityCheck: application.integrityCheck, freeMode: application.freeMode, twoFactorAuth: application.twoFactorAuth, programHash: application.programHash, version: application.version, downloadLink: application.downloadLink, adminRoleId: application.adminRoleId, adminRoleLevel: application.adminRoleLevel)
+                                    Task {
+                                        await viewModel.updateApplicationById(application: newApp)
+                                    }
+                                    if let index = viewModel.applications.firstIndex(where: { $0.id == application.id }) {
+                                        viewModel.applications[index].status = 1
+                                    }
+                                }
+                            }
+                            CustomButton(title: "Delete") {
+                                Task {
+                                    await viewModel.deleteApplicationById(applicationId: application.id)
+                                    if viewModel.requestState == .success {
+                                        alertTitle = "Success!"
+                                        alertMessage = "Application was deleted successfully."
+                                        isShowingAlert = true
+                                    } else {
+                                        alertTitle = "Oops!"
+                                        alertMessage = viewModel.errorData?.message ?? "Unkown error"
+                                        isShowingAlert = true
+                                    }
+                                }
+                            }
+                        }
+                }
             }
         }.onAppear(perform: {
             Task {
                 await viewModel.getApplicationsOfAccount()
             }
         })
+        .alert(isPresented: $isShowingAlert) {
+            Alert(
+                title: Text(alertTitle),
+                message: Text(alertMessage),
+                dismissButton: .default(Text("OK"))
+            )
+        }
     }
 }
 
@@ -118,7 +170,7 @@ struct ApplicationRowView: View {
 
 struct CustomButton: View {
     var title: String
-    var isDisabled: Bool
+    var isDisabled: Bool = false
     var action: () async -> Void
     
     var body: some View {

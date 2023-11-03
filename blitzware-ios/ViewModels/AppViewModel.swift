@@ -74,7 +74,6 @@ class AppViewModel: ObservableObject {
                 if httpResponse.statusCode == 200 {
                     let decoder = JSONDecoder()
                     let results = try decoder.decode([ApplicationData].self, from: data)
-                    print(results)
                     self.applications = results
                     self.requestState = .success
 //                    let result = try JSONDecoder().decode(ApplicationData.self, from: data)
@@ -90,6 +89,86 @@ class AppViewModel: ObservableObject {
             print("Error decoding data: \(error)")
             self.requestState = .error
             self.errorData = ErrorData(code: "CATCH_ERROR", message: "Error decoding data: \(error.localizedDescription)")
+        }
+    }
+    
+    func updateApplicationById(application: ApplicationData) async {
+        self.requestState = .pending
+        
+        guard let url = URL(string: "http://localhost:9000/api/applications/\(application.id)") else { return }
+        
+        let body: [String: Any] = ["status": application.status, "hwidCheck": application.hwidCheck, "developerMode": application.developerMode,
+                                   "integrityCheck": application.integrityCheck, "freeMode": application.freeMode, "twoFactorAuth": application.twoFactorAuth,
+                                   "programHash": application.programHash ?? nil, "version": application.version, "downloadLink": application.downloadLink ?? nil,
+                                   "accountId": self.accountData!.account.id, "subscription": application.adminRoleId ?? nil]
+        
+        do {
+            let finalData = try JSONSerialization.data(withJSONObject: body)
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "PUT"
+            request.httpBody = finalData
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+            
+            do {
+                let (data, response) = try await URLSession.shared.data(for: request)
+                self.requestState = .sent
+                
+                let responseString = String(data: data, encoding: .utf8)
+                print("Raw Response Data:\n\(responseString ?? "Empty")")
+                
+                if let httpResponse = response as? HTTPURLResponse {
+                    if httpResponse.statusCode == 200 {
+                        self.requestState = .success
+                    } else {
+                        let result = try JSONDecoder().decode(ErrorData.self, from: data)
+                        self.errorData = result
+                        self.requestState = .error
+                    }
+                }
+            } catch {
+                print("Error fetching data: \(error)")
+                self.requestState = .error
+                self.errorData = ErrorData(code: "FETCH_ERROR", message: "Error fetching data: \(error.localizedDescription)")
+            }
+        } catch {
+            print("Error serializing JSON: \(error.localizedDescription)")
+            self.requestState = .error
+            self.errorData = ErrorData(code: "CATCH_ERROR", message: "Error serializing JSON: \(error.localizedDescription)")
+        }
+    }
+    
+    func deleteApplicationById(applicationId: String) async {
+        self.requestState = .pending
+        
+        guard let url = URL(string: "http://localhost:9000/api/applications/\(applicationId)") else { return }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            self.requestState = .sent
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                if httpResponse.statusCode == 204 {
+                    if let index = applications.firstIndex(where: { $0.id == applicationId }) {
+                        applications.remove(at: index)
+                    }
+                    self.requestState = .success
+                } else {
+                    let result = try JSONDecoder().decode(ErrorData.self, from: data)
+                    self.errorData = result
+                    self.requestState = .error
+                }
+            }
+        } catch {
+            print("Error fetching data: \(error)")
+            self.requestState = .error
+            self.errorData = ErrorData(code: "FETCH_ERROR", message: "Error fetching data: \(error.localizedDescription)")
         }
     }
 }

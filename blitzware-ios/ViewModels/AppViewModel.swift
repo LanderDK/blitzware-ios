@@ -9,6 +9,7 @@ class AppViewModel: ObservableObject {
     private var baseUrl: String = "http://localhost:9000/api"
     
     func login(username: String, password: String) async {
+        self.errorData = nil
         self.requestState = .pending
         
         guard let url = URL(string: "http://localhost:9000/api/accounts/login") else { return }
@@ -93,6 +94,7 @@ class AppViewModel: ObservableObject {
     }
     
     func updateApplicationById(application: ApplicationData) async {
+        self.errorData = nil
         self.requestState = .pending
         
         guard let url = URL(string: "http://localhost:9000/api/applications/\(application.id)") else { return }
@@ -140,6 +142,7 @@ class AppViewModel: ObservableObject {
     }
     
     func deleteApplicationById(applicationId: String) async {
+        self.errorData = nil
         self.requestState = .pending
         
         guard let url = URL(string: "http://localhost:9000/api/applications/\(applicationId)") else { return }
@@ -169,6 +172,50 @@ class AppViewModel: ObservableObject {
             print("Error fetching data: \(error)")
             self.requestState = .error
             self.errorData = ErrorData(code: "FETCH_ERROR", message: "Error fetching data: \(error.localizedDescription)")
+        }
+    }
+    
+    func createApplication(name: String) async {
+        self.errorData = nil
+        self.requestState = .pending
+        
+        guard let url = URL(string: "http://localhost:9000/api/applications") else { return }
+        
+        let body: [String: Any] = ["name": name, "accountId": self.accountData!.account.id]
+        
+        do {
+            let finalData = try JSONSerialization.data(withJSONObject: body)
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.httpBody = finalData
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+            
+            do {
+                let (data, response) = try await URLSession.shared.data(for: request)
+                self.requestState = .sent
+                
+                if let httpResponse = response as? HTTPURLResponse {
+                    if httpResponse.statusCode == 201 {
+                        let result = try JSONDecoder().decode(ApplicationData.self, from: data)
+                        self.applications.append(result)
+                        self.requestState = .success
+                    } else {
+                        let result = try JSONDecoder().decode(ErrorData.self, from: data)
+                        self.errorData = result
+                        self.requestState = .error
+                    }
+                }
+            } catch {
+                print("Error fetching data: \(error)")
+                self.requestState = .error
+                self.errorData = ErrorData(code: "FETCH_ERROR", message: "Error fetching data: \(error.localizedDescription)")
+            }
+        } catch {
+            print("Error serializing JSON: \(error.localizedDescription)")
+            self.requestState = .error
+            self.errorData = ErrorData(code: "CATCH_ERROR", message: "Error serializing JSON: \(error.localizedDescription)")
         }
     }
 }

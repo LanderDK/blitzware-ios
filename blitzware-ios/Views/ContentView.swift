@@ -72,11 +72,22 @@ struct AuthenticatedView: View {
     @State private var isShowingAlert = false
     @State private var alertTitle = ""
     @State private var alertMessage = ""
+    @State private var isShowingAddSheet = false
     
     var body: some View {
-        Text("Welcome back, \(viewModel.accountData!.account.username)")
-            .font(.largeTitle)
+        HStack {
+            Text("Welcome back, \(viewModel.accountData!.account.username)!")
+                .font(.title)
+                .padding()
+            Spacer()
+            Button {
+                isShowingAddSheet = true
+            } label: {
+                Image(systemName: "plus")
+            }
+            .font(.title)
             .padding()
+        }
         VStack {
             if viewModel.requestState == .error {
                 Text(viewModel.errorData?.message ?? "Unkown error")
@@ -143,8 +154,37 @@ struct AuthenticatedView: View {
                 dismissButton: .default(Text("OK"))
             )
         }
+        .sheet(isPresented: $isShowingAddSheet) {
+            AddApplicationView(isPresented: $isShowingAddSheet)
+        }
     }
 }
+
+struct AddApplicationView: View {
+    @EnvironmentObject var viewModel: AppViewModel
+    @Binding var isPresented: Bool
+    @State private var applicationName = ""
+
+    var body: some View {
+        NavigationView {
+            Form {
+                TextField("Application name", text: $applicationName)
+            }
+            .navigationBarItems(
+                trailing: Button("Create") {
+                    if !applicationName.isEmpty {
+                        Task {
+                            await viewModel.createApplication(name: applicationName)
+                        }
+                        isPresented = false
+                    }
+                }
+            )
+            .navigationBarTitle("Create an application", displayMode: .inline)
+        }
+    }
+}
+
 
 struct ApplicationRowView: View {
     var application: ApplicationData

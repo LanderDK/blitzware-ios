@@ -3,6 +3,7 @@ import Foundation
 class AppViewModel: ObservableObject {
     @Published var accountData: AccountData?
     @Published var applications: [ApplicationData] = []
+    @Published var generalChatMsgs: [ChatMessageData] = []
     @Published var requestState: RequestState = .none
     @Published var errorData: ErrorData?
     @Published var isAuthed: Bool = false
@@ -216,6 +217,127 @@ class AppViewModel: ObservableObject {
             print("Error serializing JSON: \(error.localizedDescription)")
             self.requestState = .error
             self.errorData = ErrorData(code: "CATCH_ERROR", message: "Error serializing JSON: \(error.localizedDescription)")
+        }
+    }
+    
+    func getChatMsgsByChatId(id: Int) async {
+        self.errorData = nil
+        self.requestState = .pending
+        
+        guard let url = URL(string: "http://localhost:9000/api/chatMsgs/chat/\(id)") else { return }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            self.requestState = .sent
+//                      let responseString = String(data: data, encoding: .utf8)
+//                      print("Raw Response Data:\n\(responseString ?? "Empty")")
+            
+            if let httpResponse = response as? HTTPURLResponse {
+//                          print("HTTP Status Code: \(httpResponse.statusCode)")
+//                          print("Response Headers: \(httpResponse.allHeaderFields)")
+                if httpResponse.statusCode == 200 {
+                    let decoder = JSONDecoder()
+                    let results = try decoder.decode([ChatMessageData].self, from: data)
+                    self.generalChatMsgs = results
+                    self.requestState = .success
+//                    let result = try JSONDecoder().decode(ApplicationData.self, from: data)
+//                    self.applications.append(result)
+//                    self.requestState = .success
+                } else {
+                    let result = try JSONDecoder().decode(ErrorData.self, from: data)
+                    self.errorData = result
+                    self.requestState = .error
+                }
+            }
+        } catch {
+            print("Error decoding data: \(error)")
+            self.requestState = .error
+            self.errorData = ErrorData(code: "CATCH_ERROR", message: "Error decoding data: \(error.localizedDescription)")
+        }
+    }
+    
+    func createChatMsg(msg: String, chatId: Int) async {
+        self.errorData = nil
+        self.requestState = .pending
+        
+        guard let url = URL(string: "http://localhost:9000/api/chatMsgs") else { return }
+        
+        let dateFormatter = ISO8601DateFormatter()
+        let dateString = dateFormatter.string(from: Date())
+        
+        let body: [String: Any] = ["username": self.accountData!.account.username, "message": msg, "date": dateString, "chatId": chatId]
+        
+        do {
+            let finalData = try JSONSerialization.data(withJSONObject: body)
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.httpBody = finalData
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+            
+            do {
+                let (data, response) = try await URLSession.shared.data(for: request)
+                self.requestState = .sent
+                
+                if let httpResponse = response as? HTTPURLResponse {
+                    if httpResponse.statusCode == 201 {
+                        let result = try JSONDecoder().decode(ChatMessageData.self, from: data)
+                        self.generalChatMsgs.append(result)
+                        self.requestState = .success
+                    } else {
+                        let result = try JSONDecoder().decode(ErrorData.self, from: data)
+                        self.errorData = result
+                        self.requestState = .error
+                    }
+                }
+            } catch {
+                print("Error fetching data: \(error)")
+                self.requestState = .error
+                self.errorData = ErrorData(code: "FETCH_ERROR", message: "Error fetching data: \(error.localizedDescription)")
+            }
+        } catch {
+            print("Error serializing JSON: \(error.localizedDescription)")
+            self.requestState = .error
+            self.errorData = ErrorData(code: "CATCH_ERROR", message: "Error serializing JSON: \(error.localizedDescription)")
+        }
+    }
+    
+    func deleteChatMsgById(id: Int) async {
+        self.errorData = nil
+        self.requestState = .pending
+        
+        guard let url = URL(string: "http://localhost:9000/api/chatMsgs/\(id)") else { return }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            self.requestState = .sent
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                if httpResponse.statusCode == 204 {
+                    if let index = generalChatMsgs.firstIndex(where: { $0.id == id }) {
+                        generalChatMsgs.remove(at: index)
+                    }
+                    self.requestState = .success
+                } else {
+                    let result = try JSONDecoder().decode(ErrorData.self, from: data)
+                    self.errorData = result
+                    self.requestState = .error
+                }
+            }
+        } catch {
+            print("Error fetching data: \(error)")
+            self.requestState = .error
+            self.errorData = ErrorData(code: "FETCH_ERROR", message: "Error fetching data: \(error.localizedDescription)")
         }
     }
 }

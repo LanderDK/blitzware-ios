@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C13BF622AFD206200C29950 /* ApplicationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C13BF612AFD206200C29950 /* ApplicationView.swift */; };
+		4C13BF642AFD214100C29950 /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C13BF632AFD214100C29950 /* AuthenticationView.swift */; };
+		4C13BF662AFD221C00C29950 /* ExtentionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C13BF652AFD221C00C29950 /* ExtentionsView.swift */; };
+		4C13BF682AFD227600C29950 /* ResourcesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C13BF672AFD227600C29950 /* ResourcesView.swift */; };
+		4C13BF6A2B02279E00C29950 /* CommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C13BF692B02279E00C29950 /* CommunityView.swift */; };
+		4C13BF6C2B022A4400C29950 /* ChatMessageDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C13BF6B2B022A4400C29950 /* ChatMessageDataModel.swift */; };
+		4C13BF6F2B025C1D00C29950 /* ExyteChat in Frameworks */ = {isa = PBXBuildFile; productRef = 4C13BF6E2B025C1D00C29950 /* ExyteChat */; };
 		4CA9D8182AF05CB40076FDD2 /* blitzware_iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA9D8172AF05CB40076FDD2 /* blitzware_iosApp.swift */; };
 		4CA9D81C2AF05CB60076FDD2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CA9D81B2AF05CB60076FDD2 /* Assets.xcassets */; };
 		4CA9D81F2AF05CB60076FDD2 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CA9D81E2AF05CB60076FDD2 /* Preview Assets.xcassets */; };
@@ -19,6 +26,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4C13BF612AFD206200C29950 /* ApplicationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationView.swift; sourceTree = "<group>"; };
+		4C13BF632AFD214100C29950 /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
+		4C13BF652AFD221C00C29950 /* ExtentionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtentionsView.swift; sourceTree = "<group>"; };
+		4C13BF672AFD227600C29950 /* ResourcesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourcesView.swift; sourceTree = "<group>"; };
+		4C13BF692B02279E00C29950 /* CommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityView.swift; sourceTree = "<group>"; };
+		4C13BF6B2B022A4400C29950 /* ChatMessageDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageDataModel.swift; sourceTree = "<group>"; };
 		4CA9D8142AF05CB40076FDD2 /* blitzware-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "blitzware-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CA9D8172AF05CB40076FDD2 /* blitzware_iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = blitzware_iosApp.swift; sourceTree = "<group>"; };
 		4CA9D81B2AF05CB60076FDD2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -36,6 +49,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C13BF6F2B025C1D00C29950 /* ExyteChat in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,6 +100,7 @@
 				4CA9D8382AF245DC0076FDD2 /* AccountDataModel.swift */,
 				4CA9D83A2AF247060076FDD2 /* ApplicationDataModel.swift */,
 				4CA9D83C2AF247490076FDD2 /* ErrorDataModel.swift */,
+				4C13BF6B2B022A4400C29950 /* ChatMessageDataModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -110,6 +125,11 @@
 			isa = PBXGroup;
 			children = (
 				4CA9D8262AF0735D0076FDD2 /* ContentView.swift */,
+				4C13BF612AFD206200C29950 /* ApplicationView.swift */,
+				4C13BF632AFD214100C29950 /* AuthenticationView.swift */,
+				4C13BF652AFD221C00C29950 /* ExtentionsView.swift */,
+				4C13BF672AFD227600C29950 /* ResourcesView.swift */,
+				4C13BF692B02279E00C29950 /* CommunityView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -130,6 +150,9 @@
 			dependencies = (
 			);
 			name = "blitzware-ios";
+			packageProductDependencies = (
+				4C13BF6E2B025C1D00C29950 /* ExyteChat */,
+			);
 			productName = "blitzware-ios";
 			productReference = 4CA9D8142AF05CB40076FDD2 /* blitzware-ios.app */;
 			productType = "com.apple.product-type.application";
@@ -158,6 +181,9 @@
 				Base,
 			);
 			mainGroup = 4CA9D80B2AF05CB40076FDD2;
+			packageReferences = (
+				4C13BF6D2B025C1D00C29950 /* XCRemoteSwiftPackageReference "Chat" */,
+			);
 			productRefGroup = 4CA9D8152AF05CB40076FDD2 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -185,12 +211,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				4CA9D83B2AF247060076FDD2 /* ApplicationDataModel.swift in Sources */,
+				4C13BF662AFD221C00C29950 /* ExtentionsView.swift in Sources */,
+				4C13BF6C2B022A4400C29950 /* ChatMessageDataModel.swift in Sources */,
+				4C13BF6A2B02279E00C29950 /* CommunityView.swift in Sources */,
 				4CA9D8392AF245DC0076FDD2 /* AccountDataModel.swift in Sources */,
+				4C13BF682AFD227600C29950 /* ResourcesView.swift in Sources */,
 				4CA9D8272AF0735D0076FDD2 /* ContentView.swift in Sources */,
 				4CA9D8452AF2DE410076FDD2 /* AppViewModel.swift in Sources */,
 				4CA9D8182AF05CB40076FDD2 /* blitzware_iosApp.swift in Sources */,
+				4C13BF642AFD214100C29950 /* AuthenticationView.swift in Sources */,
 				4CA9D83D2AF247490076FDD2 /* ErrorDataModel.swift in Sources */,
 				4CA9D8432AF24E5F0076FDD2 /* RequestState.swift in Sources */,
+				4C13BF622AFD206200C29950 /* ApplicationView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -396,6 +428,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		4C13BF6D2B025C1D00C29950 /* XCRemoteSwiftPackageReference "Chat" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/exyte/Chat.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4C13BF6E2B025C1D00C29950 /* ExyteChat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4C13BF6D2B025C1D00C29950 /* XCRemoteSwiftPackageReference "Chat" */;
+			productName = ExyteChat;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 4CA9D80C2AF05CB40076FDD2 /* Project object */;
 }

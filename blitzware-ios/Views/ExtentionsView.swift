@@ -7,12 +7,26 @@
 
 import SwiftUI
 
-struct ExtentionsView: View {
+struct CustomButton: View {
+    var title: String
+    var isDisabled: Bool = false
+    var action: () async -> Void
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Button(action: {
+            Task {
+                await action()
+            }
+        }) {
+            Text(title)
+                .font(.headline)
+                .fontWeight(.bold)
+                .padding()
+                .background(isDisabled ? Color(red: 228/255, green: 228/255, blue: 228/255) :
+                                Color(red: 25/255, green: 118/255, blue: 210/255))
+                .foregroundColor(isDisabled ? .gray : .white)
+                .cornerRadius(8)
+        }
+        .disabled(isDisabled)
     }
-}
-
-#Preview {
-    ExtentionsView()
 }

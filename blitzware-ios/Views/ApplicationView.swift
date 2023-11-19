@@ -32,7 +32,7 @@ struct ApplicationsList: View {
             }
             VStack {
                 if viewModel.requestState == .error {
-                    Text(viewModel.errorData?.message ?? "Unkown error")
+                    Text(viewModel.errorData?.message ?? "Unknown error")
                         .foregroundColor(.red)
                 }
                 if viewModel.requestState == .pending || viewModel.requestState == .sent {
@@ -41,11 +41,6 @@ struct ApplicationsList: View {
                     List(viewModel.applications, id: \.id) { application in
                         ApplicationRowView(application: application)
                             .contextMenu {
-                                CustomButton(title: "Panel") {
-                                    Task {
-                                        await viewModel.login(username: "username", password: "password")
-                                    }
-                                }
                                 if application.status == 1 {
                                     CustomButton(title: "Disable") {
                                         let newApp = ApplicationData(id: application.id, name: application.name, secret: application.secret, status: 0, hwidCheck: application.hwidCheck, developerMode: application.developerMode, integrityCheck: application.integrityCheck, freeMode: application.freeMode, twoFactorAuth: application.twoFactorAuth, programHash: application.programHash, version: application.version, downloadLink: application.downloadLink, adminRoleId: application.adminRoleId, adminRoleLevel: application.adminRoleLevel)
@@ -99,6 +94,9 @@ struct ApplicationsList: View {
             .sheet(isPresented: $isShowingAddSheet) {
                 AddApplicationView(isPresented: $isShowingAddSheet)
             }
+//            .sheet(isPresented: $viewModel.isShowingDetailSheet) {
+//                ApplicationDetailView(applicationId: viewModel.selectedAppId!, isPresented: $viewModel.isShowingDetailSheet)
+//            }
         }
     }
 }
@@ -110,29 +108,31 @@ struct AddApplicationView: View {
     @FocusState private var isTextFieldFocused: Bool
 
     var body: some View {
-        NavigationView {
+        VStack {
+            HStack {
+                Button("Cancel") {
+                    isPresented = false
+                }
+                Spacer()
+                Text("Create an application")
+                    .font(.headline)
+                    .padding()
+                Spacer()
+                Button("Create") {
+                    if !applicationName.isEmpty {
+                        Task {
+                            await viewModel.createApplication(name: applicationName)
+                        }
+                        isPresented = false
+                    }
+                }
+            }
+            .padding()
+            
             Form {
                 TextField("Application name", text: $applicationName)
                     .focused($isTextFieldFocused)
             }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
-                        isPresented = false
-                    }
-                }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Create") {
-                        if !applicationName.isEmpty {
-                            Task {
-                                await viewModel.createApplication(name: applicationName)
-                            }
-                            isPresented = false
-                        }
-                    }
-                }
-            }
-            .navigationBarTitle("Create an application", displayMode: .inline)
         }
         .onAppear {
             isTextFieldFocused = true
@@ -140,24 +140,36 @@ struct AddApplicationView: View {
     }
 }
 
+
 struct ApplicationRowView: View {
+    @EnvironmentObject var viewModel: AppViewModel
     var application: ApplicationData
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 3) {
-            Text(application.name)
-                .foregroundColor(.primary)
-                .font(.headline)
-            HStack(spacing: 3) {
-                if application.status == 1 {
-                    Label("Enabled", systemImage: "circle.badge.checkmark.fill")
-                        .foregroundColor(.green)
-                } else {
-                    Label("Disabled", systemImage: "circle.badge.xmark.fill")
-                        .foregroundColor(.red)
+        NavigationLink(destination: BottomNavBarApp(application: application)) {
+            VStack(alignment: .leading, spacing: 3) {
+                Text(application.name)
+                    .foregroundColor(.primary)
+                    .font(.headline)
+                HStack(spacing: 3) {
+                    if application.status == 1 {
+                        Label("Enabled", systemImage: "circle.badge.checkmark.fill")
+                            .foregroundColor(.green)
+                    } else {
+                        Label("Disabled", systemImage: "circle.badge.xmark.fill")
+                            .foregroundColor(.red)
+                    }
+//                    Spacer()
+//                    Button {
+//                        viewModel.selectedAppId = application.id
+//                        viewModel.isShowingDetailSheet = true
+//                    } label: {
+//                        Image(systemName: "pencil")
+//                    }
+//                    .font(.title)
                 }
+                .font(.subheadline)
             }
-            .font(.subheadline)
         }
     }
 }

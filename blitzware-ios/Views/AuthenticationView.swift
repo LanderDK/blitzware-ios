@@ -25,18 +25,18 @@ struct LoginView: View {
                     .font(.subheadline)
                 Text("Create an account")
                     .font(.subheadline)
-                    .foregroundColor(Color(red: 255/255, green: 94/255, blue: 0/255))
-            }.padding(.bottom, 25)
+                    .foregroundColor(Constants.mainColorLight)
+            }.padding(.bottom, Constants.verticalPadding)
             
             if viewModel.requestState == .error {
-                Text(viewModel.errorData?.message ?? "Unkown error")
+                Text(viewModel.errorData?.message ?? "Unknown error")
                     .foregroundColor(.red)
-                    .padding(.bottom, 25)
+                    .padding(.bottom, Constants.verticalPadding)
             }
             else if viewModel.requestState == .success {
                 Text("Successfully logged in!")
                     .foregroundColor(.green)
-                    .padding(.bottom, 25)
+                    .padding(.bottom, Constants.verticalPadding)
             }
             
             VStack {

@@ -55,7 +55,7 @@ struct ChatList: View {
     var body: some View {
         VStack {
             if viewModel.requestState == .error {
-                Text(viewModel.errorData?.message ?? "Unkown error")
+                Text(viewModel.errorData?.message ?? "Unknown error")
                     .foregroundColor(.red)
             }
             if viewModel.requestState == .pending || viewModel.requestState == .sent {
@@ -65,9 +65,7 @@ struct ChatList: View {
                 ScrollView {
                     ForEach(viewModel.generalChatMsgs, id: \.id) { chatMsg in
                         ChatMsg(username: chatMsg.username, message: chatMsg.message, date: chatMsg.date, onDelete: {
-                            Task {
-                                await viewModel.deleteChatMsgById(id: chatMsg.id)
-                            }
+                            deleteChatMessage(chatMsg.id)
                         })
                     }
                 }
@@ -95,12 +93,18 @@ struct ChatList: View {
             }
         })
         .alert(isPresented: $showAlert) {
-                    Alert(
-                        title: Text("Oops!"),
-                        message: Text("Please provide a valid message!"),
-                        dismissButton: .default(Text("OK"))
-                    )
-                }
+            Alert(
+                title: Text("Oops!"),
+                message: Text("Please provide a valid message!"),
+                dismissButton: .default(Text("OK"))
+            )
+        }
+    }
+    
+    private func deleteChatMessage(_ id: Int) {
+        Task {
+            await viewModel.deleteChatMsgById(id: id)
+        }
     }
     
     func sendMessage() {

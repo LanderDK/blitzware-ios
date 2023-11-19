@@ -51,7 +51,7 @@ struct ResourcesList: View {
                     ResourceView(name: "ReactJS Example", link: "https://github.com/LanderDK/ApiTestReact", iconName: "arrow.down.to.line")
                 }
             }
-            .navigationBarTitle("Resources", displayMode: .large)
+            .navigationBarTitle("Resources")
         }
     }
 }

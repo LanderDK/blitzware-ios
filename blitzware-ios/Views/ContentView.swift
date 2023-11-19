@@ -32,13 +32,13 @@ struct BottomNavBar: View {
                         Image(systemName: "person.3.fill")
                         Text("Community")
                     }
-                Text("Account")
+                AccountMenuView()
                     .tabItem {
                         Image(systemName: "person.fill")
                         Text("Account")
                     }
             }
-            .accentColor(Color(red: 253/255, green: 126/255, blue: 20/255))
+            .accentColor(Constants.accentColor)
         }
     }
 }

@@ -1,18 +1,18 @@
 import Foundation
 
-struct AccountData: Codable {
-    let account: Account
+struct AccountLoginData: Codable {
+    var account: Account
     let token: String
     
     struct Account: Codable {
         let id: String
-        let username: String
-        let email: String
-        let roles: [String]
-        let creationDate: String
-        let profilePicture: String?
-        let emailVerified: Int
-        let twoFactorAuth: Int
-        let enabled: Int
+        var username: String
+        var email: String
+        var roles: [String]
+        var creationDate: String
+        var profilePicture: String?
+        var emailVerified: Int
+        var twoFactorAuth: Int
+        var enabled: Int
     }
 }

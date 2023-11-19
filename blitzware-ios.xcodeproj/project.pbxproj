@@ -14,6 +14,11 @@
 		4C13BF6A2B02279E00C29950 /* CommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C13BF692B02279E00C29950 /* CommunityView.swift */; };
 		4C13BF6C2B022A4400C29950 /* ChatMessageDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C13BF6B2B022A4400C29950 /* ChatMessageDataModel.swift */; };
 		4C13BF6F2B025C1D00C29950 /* ExyteChat in Frameworks */ = {isa = PBXBuildFile; productRef = 4C13BF6E2B025C1D00C29950 /* ExyteChat */; };
+		4C13BF712B03E1AF00C29950 /* AccountMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C13BF702B03E1AF00C29950 /* AccountMenuView.swift */; };
+		4C13BF732B03E22300C29950 /* AccountLogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C13BF722B03E22300C29950 /* AccountLogsView.swift */; };
+		4C13BF752B03E23600C29950 /* AccountDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C13BF742B03E23600C29950 /* AccountDetailsView.swift */; };
+		4C13BF772B03E24900C29950 /* AdminPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C13BF762B03E24900C29950 /* AdminPanelView.swift */; };
+		4C13BF792B04DBF700C29950 /* LogDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C13BF782B04DBF700C29950 /* LogDataModel.swift */; };
 		4CA9D8182AF05CB40076FDD2 /* blitzware_iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA9D8172AF05CB40076FDD2 /* blitzware_iosApp.swift */; };
 		4CA9D81C2AF05CB60076FDD2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CA9D81B2AF05CB60076FDD2 /* Assets.xcassets */; };
 		4CA9D81F2AF05CB60076FDD2 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CA9D81E2AF05CB60076FDD2 /* Preview Assets.xcassets */; };
@@ -23,6 +28,7 @@
 		4CA9D83D2AF247490076FDD2 /* ErrorDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA9D83C2AF247490076FDD2 /* ErrorDataModel.swift */; };
 		4CA9D8432AF24E5F0076FDD2 /* RequestState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA9D8422AF24E5F0076FDD2 /* RequestState.swift */; };
 		4CA9D8452AF2DE410076FDD2 /* AppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA9D8442AF2DE410076FDD2 /* AppViewModel.swift */; };
+		4CE9FAA52B08C81F009E38E4 /* ApplicationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9FAA42B08C81F009E38E4 /* ApplicationDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +38,11 @@
 		4C13BF672AFD227600C29950 /* ResourcesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourcesView.swift; sourceTree = "<group>"; };
 		4C13BF692B02279E00C29950 /* CommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityView.swift; sourceTree = "<group>"; };
 		4C13BF6B2B022A4400C29950 /* ChatMessageDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageDataModel.swift; sourceTree = "<group>"; };
+		4C13BF702B03E1AF00C29950 /* AccountMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountMenuView.swift; sourceTree = "<group>"; };
+		4C13BF722B03E22300C29950 /* AccountLogsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountLogsView.swift; sourceTree = "<group>"; };
+		4C13BF742B03E23600C29950 /* AccountDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailsView.swift; sourceTree = "<group>"; };
+		4C13BF762B03E24900C29950 /* AdminPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminPanelView.swift; sourceTree = "<group>"; };
+		4C13BF782B04DBF700C29950 /* LogDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDataModel.swift; sourceTree = "<group>"; };
 		4CA9D8142AF05CB40076FDD2 /* blitzware-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "blitzware-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CA9D8172AF05CB40076FDD2 /* blitzware_iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = blitzware_iosApp.swift; sourceTree = "<group>"; };
 		4CA9D81B2AF05CB60076FDD2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -42,6 +53,7 @@
 		4CA9D83C2AF247490076FDD2 /* ErrorDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorDataModel.swift; sourceTree = "<group>"; };
 		4CA9D8422AF24E5F0076FDD2 /* RequestState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestState.swift; sourceTree = "<group>"; };
 		4CA9D8442AF2DE410076FDD2 /* AppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModel.swift; sourceTree = "<group>"; };
+		4CE9FAA42B08C81F009E38E4 /* ApplicationDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +68,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4C13BF7C2B05418300C29950 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
 		4CA9D80B2AF05CB40076FDD2 = {
 			isa = PBXGroup;
 			children = (
@@ -75,6 +94,7 @@
 		4CA9D8162AF05CB40076FDD2 /* blitzware-ios */ = {
 			isa = PBXGroup;
 			children = (
+				4C13BF7C2B05418300C29950 /* Assets */,
 				4CA9D8412AF24E350076FDD2 /* Enums */,
 				4CA9D8372AF245B00076FDD2 /* Models */,
 				4CA9D83E2AF247DC0076FDD2 /* ViewModels */,
@@ -101,6 +121,7 @@
 				4CA9D83A2AF247060076FDD2 /* ApplicationDataModel.swift */,
 				4CA9D83C2AF247490076FDD2 /* ErrorDataModel.swift */,
 				4C13BF6B2B022A4400C29950 /* ChatMessageDataModel.swift */,
+				4C13BF782B04DBF700C29950 /* LogDataModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -126,10 +147,15 @@
 			children = (
 				4CA9D8262AF0735D0076FDD2 /* ContentView.swift */,
 				4C13BF612AFD206200C29950 /* ApplicationView.swift */,
+				4CE9FAA42B08C81F009E38E4 /* ApplicationDetailView.swift */,
 				4C13BF632AFD214100C29950 /* AuthenticationView.swift */,
 				4C13BF652AFD221C00C29950 /* ExtentionsView.swift */,
 				4C13BF672AFD227600C29950 /* ResourcesView.swift */,
 				4C13BF692B02279E00C29950 /* CommunityView.swift */,
+				4C13BF702B03E1AF00C29950 /* AccountMenuView.swift */,
+				4C13BF722B03E22300C29950 /* AccountLogsView.swift */,
+				4C13BF742B03E23600C29950 /* AccountDetailsView.swift */,
+				4C13BF762B03E24900C29950 /* AdminPanelView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -211,6 +237,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4CA9D83B2AF247060076FDD2 /* ApplicationDataModel.swift in Sources */,
+				4C13BF752B03E23600C29950 /* AccountDetailsView.swift in Sources */,
+				4C13BF792B04DBF700C29950 /* LogDataModel.swift in Sources */,
 				4C13BF662AFD221C00C29950 /* ExtentionsView.swift in Sources */,
 				4C13BF6C2B022A4400C29950 /* ChatMessageDataModel.swift in Sources */,
 				4C13BF6A2B02279E00C29950 /* CommunityView.swift in Sources */,
@@ -219,9 +247,13 @@
 				4CA9D8272AF0735D0076FDD2 /* ContentView.swift in Sources */,
 				4CA9D8452AF2DE410076FDD2 /* AppViewModel.swift in Sources */,
 				4CA9D8182AF05CB40076FDD2 /* blitzware_iosApp.swift in Sources */,
+				4C13BF772B03E24900C29950 /* AdminPanelView.swift in Sources */,
+				4CE9FAA52B08C81F009E38E4 /* ApplicationDetailView.swift in Sources */,
 				4C13BF642AFD214100C29950 /* AuthenticationView.swift in Sources */,
 				4CA9D83D2AF247490076FDD2 /* ErrorDataModel.swift in Sources */,
+				4C13BF712B03E1AF00C29950 /* AccountMenuView.swift in Sources */,
 				4CA9D8432AF24E5F0076FDD2 /* RequestState.swift in Sources */,
+				4C13BF732B03E22300C29950 /* AccountLogsView.swift in Sources */,
 				4C13BF622AFD206200C29950 /* ApplicationView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

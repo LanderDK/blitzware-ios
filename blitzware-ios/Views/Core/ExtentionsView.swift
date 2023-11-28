@@ -37,3 +37,41 @@ struct CustomButton: View {
         .disabled(isDisabled)
     }
 }
+
+struct DropDownInputBool: View {
+    let label: String
+    let name: String
+    let options: [String]
+    @Binding var selectedOption: Int
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text(label)
+            Picker(selection: $selectedOption, label: Text("")) {
+                ForEach(options, id: \.self) { option in
+                    Text(option == "0" ? "False" : "True").tag(option)
+                }
+            }
+            .pickerStyle(MenuPickerStyle())
+        }
+    }
+}
+
+struct DropdownInputString: View {
+    let label: String
+    let name: String
+    let options: [String]
+    @Binding var selectedOption: String
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text(label)
+            Picker(selection: $selectedOption, label: Text("")) {
+                ForEach(options, id: \.self) { option in
+                    Text(option)
+                }
+            }
+            .pickerStyle(MenuPickerStyle())
+        }
+    }
+}

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4C13BF622AFD206200C29950 /* ApplicationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C13BF612AFD206200C29950 /* ApplicationView.swift */; };
+		4C13BF622AFD206200C29950 /* ApplicationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C13BF612AFD206200C29950 /* ApplicationsView.swift */; };
 		4C13BF642AFD214100C29950 /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C13BF632AFD214100C29950 /* AuthenticationView.swift */; };
 		4C13BF662AFD221C00C29950 /* ExtentionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C13BF652AFD221C00C29950 /* ExtentionsView.swift */; };
 		4C13BF682AFD227600C29950 /* ResourcesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C13BF672AFD227600C29950 /* ResourcesView.swift */; };
@@ -19,6 +19,11 @@
 		4C13BF752B03E23600C29950 /* AccountDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C13BF742B03E23600C29950 /* AccountDetailsView.swift */; };
 		4C13BF772B03E24900C29950 /* AdminPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C13BF762B03E24900C29950 /* AdminPanelView.swift */; };
 		4C13BF792B04DBF700C29950 /* LogDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C13BF782B04DBF700C29950 /* LogDataModel.swift */; };
+		4C9260F42B12571F006A102E /* UsersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9260F32B12571F006A102E /* UsersView.swift */; };
+		4C9260F62B125DB1006A102E /* UserDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9260F52B125DB1006A102E /* UserDataModel.swift */; };
+		4C9260F82B15EAD3006A102E /* UserSubDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9260F72B15EAD3006A102E /* UserSubDataModel.swift */; };
+		4C9260FA2B162604006A102E /* LicenseDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9260F92B162604006A102E /* LicenseDataModel.swift */; };
+		4C9260FC2B16281D006A102E /* LicensesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9260FB2B16281D006A102E /* LicensesView.swift */; };
 		4CA9D8182AF05CB40076FDD2 /* blitzware_iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA9D8172AF05CB40076FDD2 /* blitzware_iosApp.swift */; };
 		4CA9D81C2AF05CB60076FDD2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CA9D81B2AF05CB60076FDD2 /* Assets.xcassets */; };
 		4CA9D81F2AF05CB60076FDD2 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CA9D81E2AF05CB60076FDD2 /* Preview Assets.xcassets */; };
@@ -32,7 +37,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4C13BF612AFD206200C29950 /* ApplicationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationView.swift; sourceTree = "<group>"; };
+		4C13BF612AFD206200C29950 /* ApplicationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationsView.swift; sourceTree = "<group>"; };
 		4C13BF632AFD214100C29950 /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
 		4C13BF652AFD221C00C29950 /* ExtentionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtentionsView.swift; sourceTree = "<group>"; };
 		4C13BF672AFD227600C29950 /* ResourcesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourcesView.swift; sourceTree = "<group>"; };
@@ -43,6 +48,11 @@
 		4C13BF742B03E23600C29950 /* AccountDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailsView.swift; sourceTree = "<group>"; };
 		4C13BF762B03E24900C29950 /* AdminPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminPanelView.swift; sourceTree = "<group>"; };
 		4C13BF782B04DBF700C29950 /* LogDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDataModel.swift; sourceTree = "<group>"; };
+		4C9260F32B12571F006A102E /* UsersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersView.swift; sourceTree = "<group>"; };
+		4C9260F52B125DB1006A102E /* UserDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataModel.swift; sourceTree = "<group>"; };
+		4C9260F72B15EAD3006A102E /* UserSubDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSubDataModel.swift; sourceTree = "<group>"; };
+		4C9260F92B162604006A102E /* LicenseDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseDataModel.swift; sourceTree = "<group>"; };
+		4C9260FB2B16281D006A102E /* LicensesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicensesView.swift; sourceTree = "<group>"; };
 		4CA9D8142AF05CB40076FDD2 /* blitzware-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "blitzware-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CA9D8172AF05CB40076FDD2 /* blitzware_iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = blitzware_iosApp.swift; sourceTree = "<group>"; };
 		4CA9D81B2AF05CB60076FDD2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -73,6 +83,101 @@
 			children = (
 			);
 			path = Assets;
+			sourceTree = "<group>";
+		};
+		4C9260FD2B16359C006A102E /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				4C13BF612AFD206200C29950 /* ApplicationsView.swift */,
+				4CE9FAA42B08C81F009E38E4 /* ApplicationDetailView.swift */,
+				4C9261012B163620006A102E /* User */,
+				4C9261022B16363C006A102E /* License */,
+				4C9261042B16368B006A102E /* UserSub */,
+				4C9261052B1636C7006A102E /* File */,
+				4C9261062B16370D006A102E /* Log */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
+		4C9260FE2B1635C5006A102E /* Community */ = {
+			isa = PBXGroup;
+			children = (
+				4C13BF692B02279E00C29950 /* CommunityView.swift */,
+			);
+			path = Community;
+			sourceTree = "<group>";
+		};
+		4C9260FF2B1635E7006A102E /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				4C13BF672AFD227600C29950 /* ResourcesView.swift */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
+		4C9261002B163603006A102E /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				4C13BF702B03E1AF00C29950 /* AccountMenuView.swift */,
+				4C13BF722B03E22300C29950 /* AccountLogsView.swift */,
+				4C13BF742B03E23600C29950 /* AccountDetailsView.swift */,
+			);
+			path = Account;
+			sourceTree = "<group>";
+		};
+		4C9261012B163620006A102E /* User */ = {
+			isa = PBXGroup;
+			children = (
+				4C9260F32B12571F006A102E /* UsersView.swift */,
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
+		4C9261022B16363C006A102E /* License */ = {
+			isa = PBXGroup;
+			children = (
+				4C9260FB2B16281D006A102E /* LicensesView.swift */,
+			);
+			path = License;
+			sourceTree = "<group>";
+		};
+		4C9261032B163652006A102E /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				4CA9D8262AF0735D0076FDD2 /* ContentView.swift */,
+				4C13BF632AFD214100C29950 /* AuthenticationView.swift */,
+				4C13BF652AFD221C00C29950 /* ExtentionsView.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		4C9261042B16368B006A102E /* UserSub */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = UserSub;
+			sourceTree = "<group>";
+		};
+		4C9261052B1636C7006A102E /* File */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = File;
+			sourceTree = "<group>";
+		};
+		4C9261062B16370D006A102E /* Log */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Log;
+			sourceTree = "<group>";
+		};
+		4C9261072B163734006A102E /* Admin */ = {
+			isa = PBXGroup;
+			children = (
+				4C13BF762B03E24900C29950 /* AdminPanelView.swift */,
+			);
+			path = Admin;
 			sourceTree = "<group>";
 		};
 		4CA9D80B2AF05CB40076FDD2 = {
@@ -122,6 +227,9 @@
 				4CA9D83C2AF247490076FDD2 /* ErrorDataModel.swift */,
 				4C13BF6B2B022A4400C29950 /* ChatMessageDataModel.swift */,
 				4C13BF782B04DBF700C29950 /* LogDataModel.swift */,
+				4C9260F52B125DB1006A102E /* UserDataModel.swift */,
+				4C9260F72B15EAD3006A102E /* UserSubDataModel.swift */,
+				4C9260F92B162604006A102E /* LicenseDataModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -145,17 +253,12 @@
 		4CA9D8462AF2E5710076FDD2 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				4CA9D8262AF0735D0076FDD2 /* ContentView.swift */,
-				4C13BF612AFD206200C29950 /* ApplicationView.swift */,
-				4CE9FAA42B08C81F009E38E4 /* ApplicationDetailView.swift */,
-				4C13BF632AFD214100C29950 /* AuthenticationView.swift */,
-				4C13BF652AFD221C00C29950 /* ExtentionsView.swift */,
-				4C13BF672AFD227600C29950 /* ResourcesView.swift */,
-				4C13BF692B02279E00C29950 /* CommunityView.swift */,
-				4C13BF702B03E1AF00C29950 /* AccountMenuView.swift */,
-				4C13BF722B03E22300C29950 /* AccountLogsView.swift */,
-				4C13BF742B03E23600C29950 /* AccountDetailsView.swift */,
-				4C13BF762B03E24900C29950 /* AdminPanelView.swift */,
+				4C9261032B163652006A102E /* Core */,
+				4C9260FD2B16359C006A102E /* Application */,
+				4C9260FE2B1635C5006A102E /* Community */,
+				4C9260FF2B1635E7006A102E /* Resource */,
+				4C9261002B163603006A102E /* Account */,
+				4C9261072B163734006A102E /* Admin */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -242,19 +345,24 @@
 				4C13BF662AFD221C00C29950 /* ExtentionsView.swift in Sources */,
 				4C13BF6C2B022A4400C29950 /* ChatMessageDataModel.swift in Sources */,
 				4C13BF6A2B02279E00C29950 /* CommunityView.swift in Sources */,
+				4C9260FC2B16281D006A102E /* LicensesView.swift in Sources */,
 				4CA9D8392AF245DC0076FDD2 /* AccountDataModel.swift in Sources */,
+				4C9260F82B15EAD3006A102E /* UserSubDataModel.swift in Sources */,
 				4C13BF682AFD227600C29950 /* ResourcesView.swift in Sources */,
 				4CA9D8272AF0735D0076FDD2 /* ContentView.swift in Sources */,
+				4C9260F62B125DB1006A102E /* UserDataModel.swift in Sources */,
 				4CA9D8452AF2DE410076FDD2 /* AppViewModel.swift in Sources */,
 				4CA9D8182AF05CB40076FDD2 /* blitzware_iosApp.swift in Sources */,
 				4C13BF772B03E24900C29950 /* AdminPanelView.swift in Sources */,
 				4CE9FAA52B08C81F009E38E4 /* ApplicationDetailView.swift in Sources */,
 				4C13BF642AFD214100C29950 /* AuthenticationView.swift in Sources */,
 				4CA9D83D2AF247490076FDD2 /* ErrorDataModel.swift in Sources */,
+				4C9260F42B12571F006A102E /* UsersView.swift in Sources */,
 				4C13BF712B03E1AF00C29950 /* AccountMenuView.swift in Sources */,
 				4CA9D8432AF24E5F0076FDD2 /* RequestState.swift in Sources */,
+				4C9260FA2B162604006A102E /* LicenseDataModel.swift in Sources */,
 				4C13BF732B03E22300C29950 /* AccountLogsView.swift in Sources */,
-				4C13BF622AFD206200C29950 /* ApplicationView.swift in Sources */,
+				4C13BF622AFD206200C29950 /* ApplicationsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

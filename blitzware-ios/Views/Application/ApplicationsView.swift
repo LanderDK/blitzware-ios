@@ -67,7 +67,7 @@ struct ApplicationsList: View {
                                         await viewModel.deleteApplicationById(applicationId: application.id)
                                         if viewModel.requestState == .success {
                                             alertTitle = "Success!"
-                                            alertMessage = "Application was deleted successfully."
+                                            alertMessage = "Application deleted successfully."
                                             isShowingAlert = true
                                         } else {
                                             alertTitle = "Oops!"

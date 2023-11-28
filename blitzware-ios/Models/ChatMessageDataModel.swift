@@ -8,7 +8,7 @@
 import Foundation
 
 struct ChatMessageData: Codable, Identifiable, Equatable {
-    var id: Int
+    let id: Int
     var username: String
     var message: String
     var dateString: String // Represent date as a string

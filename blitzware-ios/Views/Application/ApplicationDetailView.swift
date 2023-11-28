@@ -18,12 +18,12 @@ struct BottomNavBarApp: View {
                         Image(systemName: "square.grid.3x3.fill")
                         Text("Panel")
                     }
-                Text("Users")
+                UsersList(application: application)
                     .tabItem {
                         Image(systemName: "person.fill")
                         Text("Users")
                     }
-                Text("Licenses")
+                LicensesList(application: application)
                     .tabItem {
                         Image(systemName: "key.fill")
                         Text("Licenses")

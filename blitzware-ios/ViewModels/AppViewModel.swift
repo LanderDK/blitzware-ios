@@ -14,7 +14,7 @@ class AppViewModel: ObservableObject {
     @Published var requestState: RequestState = .none
     @Published var errorData: ErrorData?
     @Published var isAuthed: Bool = false
-    private var baseUrl: String = "http://localhost:9000/api"
+    private var baseUrl: String = "https://api.blitzware.xyz/api"
     
     // MARK: - Account request functions
     
@@ -22,7 +22,7 @@ class AppViewModel: ObservableObject {
         self.errorData = nil
         self.requestState = .pending
         
-        guard let url = URL(string: "http://localhost:9000/api/accounts/login") else { return }
+        guard let url = URL(string: baseUrl + "/accounts/login") else { return }
         
         let body: [String: Any] = ["username": username, "password": password]
         
@@ -69,7 +69,7 @@ class AppViewModel: ObservableObject {
         self.errorData = nil
         self.requestState = .pending
         
-        guard let url = URL(string: "http://localhost:9000/api/accounts/\(id)") else { return }
+        guard let url = URL(string: baseUrl + "/accounts/\(id)") else { return }
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -107,7 +107,7 @@ class AppViewModel: ObservableObject {
         self.errorData = nil
         self.requestState = .pending
         
-        guard let url = URL(string: "http://localhost:9000/api/accounts/profilePicture/\(id)") else { return }
+        guard let url = URL(string: baseUrl + "/accounts/profilePicture/\(id)") else { return }
         
         let body: [String: Any] = ["profilePicture":profilePicture]
         
@@ -155,7 +155,7 @@ class AppViewModel: ObservableObject {
         self.errorData = nil
         self.requestState = .pending
         
-        guard let url = URL(string: "http://localhost:9000/api/applications/byAccId/\(self.accountData!.account.id)") else { return }
+        guard let url = URL(string: baseUrl + "/applications/byAccId/\(self.accountData!.account.id)") else { return }
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -192,7 +192,7 @@ class AppViewModel: ObservableObject {
         self.errorData = nil
         self.requestState = .pending
         
-        guard let url = URL(string: "http://localhost:9000/api/applications/\(application.id)") else { return }
+        guard let url = URL(string: baseUrl + "/applications/\(application.id)") else { return }
         
         let body: [String: Any] = ["status": application.status, "hwidCheck": application.hwidCheck, "developerMode": application.developerMode,
                                    "integrityCheck": application.integrityCheck, "freeMode": application.freeMode,
@@ -241,7 +241,7 @@ class AppViewModel: ObservableObject {
         self.errorData = nil
         self.requestState = .pending
         
-        guard let url = URL(string: "http://localhost:9000/api/applications/\(applicationId)") else { return }
+        guard let url = URL(string: baseUrl + "/applications/\(applicationId)") else { return }
 
         var request = URLRequest(url: url)
         request.httpMethod = "DELETE"
@@ -275,7 +275,7 @@ class AppViewModel: ObservableObject {
         self.errorData = nil
         self.requestState = .pending
         
-        guard let url = URL(string: "http://localhost:9000/api/applications") else { return }
+        guard let url = URL(string: baseUrl + "/applications") else { return }
         
         let body: [String: Any] = ["name": name, "accountId": self.accountData!.account.id]
         
@@ -319,7 +319,7 @@ class AppViewModel: ObservableObject {
         self.errorData = nil
         self.requestState = .pending
         
-        guard let url = URL(string: "http://localhost:9000/api/applications/byAppId/\(id)") else { return }
+        guard let url = URL(string: baseUrl + "/applications/byAppId/\(id)") else { return }
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -359,7 +359,7 @@ class AppViewModel: ObservableObject {
         self.errorData = nil
         self.requestState = .pending
         
-        guard let url = URL(string: "http://localhost:9000/api/chatMsgs/chat/\(id)") else { return }
+        guard let url = URL(string: baseUrl + "/chatMsgs/chat/\(id)") else { return }
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -396,7 +396,7 @@ class AppViewModel: ObservableObject {
         self.errorData = nil
         self.requestState = .pending
         
-        guard let url = URL(string: "http://localhost:9000/api/chatMsgs") else { return }
+        guard let url = URL(string: baseUrl + "/chatMsgs") else { return }
         
         let dateFormatter = ISO8601DateFormatter()
         let dateString = dateFormatter.string(from: Date())
@@ -443,7 +443,7 @@ class AppViewModel: ObservableObject {
         self.errorData = nil
         self.requestState = .pending
         
-        guard let url = URL(string: "http://localhost:9000/api/chatMsgs/\(id)") else { return }
+        guard let url = URL(string: baseUrl + "/chatMsgs/\(id)") else { return }
 
         var request = URLRequest(url: url)
         request.httpMethod = "DELETE"
@@ -480,7 +480,7 @@ class AppViewModel: ObservableObject {
         self.errorData = nil
         self.requestState = .pending
         
-        guard let url = URL(string: "http://localhost:9000/api/logs/\(username)") else { return }
+        guard let url = URL(string: baseUrl + "/logs/\(username)") else { return }
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -517,7 +517,7 @@ class AppViewModel: ObservableObject {
         self.errorData = nil
         self.requestState = .pending
         
-        guard let url = URL(string: "http://localhost:9000/api/logs/\(id)") else { return }
+        guard let url = URL(string: baseUrl + "/logs/\(id)") else { return }
 
         var request = URLRequest(url: url)
         request.httpMethod = "DELETE"
@@ -554,7 +554,7 @@ class AppViewModel: ObservableObject {
         self.errorData = nil
         self.requestState = .pending
         
-        guard let url = URL(string: "http://localhost:9000/api/users/\(applicationId)") else { return }
+        guard let url = URL(string: baseUrl + "/users/\(applicationId)") else { return }
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -591,7 +591,7 @@ class AppViewModel: ObservableObject {
         self.errorData = nil
         self.requestState = .pending
         
-        guard let url = URL(string: "http://localhost:9000/api/users/registerFromDashboard") else { return }
+        guard let url = URL(string: baseUrl + "/users/registerFromDashboard") else { return }
         
         let body: [String: Any] = ["username": username, "email": email, "password": password, "id": id, "expiry": expiry,
                                    "subscription": subscription]
@@ -636,7 +636,7 @@ class AppViewModel: ObservableObject {
         self.errorData = nil
         self.requestState = .pending
         
-        guard let url = URL(string: "http://localhost:9000/api/users/\(user.id)") else { return }
+        guard let url = URL(string: baseUrl + "/users/\(user.id)") else { return }
         
         let body: [String: Any] = ["username": user.username, "email": user.email, "expiryDate": user.expiryDate, "hwid": user.hwid,
                                    "twoFactorAuth": user.twoFactorAuth, "enabled": user.enabled, "subscription": user.subscription]
@@ -682,7 +682,7 @@ class AppViewModel: ObservableObject {
         self.errorData = nil
         self.requestState = .pending
         
-        guard let url = URL(string: "http://localhost:9000/api/users/\(userId)") else { return }
+        guard let url = URL(string: baseUrl + "/users/\(userId)") else { return }
 
         var request = URLRequest(url: url)
         request.httpMethod = "DELETE"
@@ -720,7 +720,7 @@ class AppViewModel: ObservableObject {
         self.errorData = nil
         self.requestState = .pending
         
-        guard let url = URL(string: "http://localhost:9000/api/userSubs/application/\(applicationId)") else { return }
+        guard let url = URL(string: baseUrl + "/userSubs/application/\(applicationId)") else { return }
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -760,7 +760,7 @@ class AppViewModel: ObservableObject {
         self.errorData = nil
         self.requestState = .pending
         
-        guard let url = URL(string: "http://localhost:9000/api/licenses/\(applicationId)") else { return }
+        guard let url = URL(string: baseUrl + "/licenses/\(applicationId)") else { return }
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -797,7 +797,7 @@ class AppViewModel: ObservableObject {
         self.errorData = nil
         self.requestState = .pending
         
-        guard let url = URL(string: "http://localhost:9000/api/licenses") else { return }
+        guard let url = URL(string: baseUrl + "/licenses") else { return }
         
         let body: [String: Any] = ["days": days, "format": format, "amount": amount, "subscription": subscription, "applicationId": applicationId]
         
@@ -841,7 +841,7 @@ class AppViewModel: ObservableObject {
         self.errorData = nil
         self.requestState = .pending
         
-        guard let url = URL(string: "http://localhost:9000/api/licenses/\(license.id)") else { return }
+        guard let url = URL(string: baseUrl + "/licenses/\(license.id)") else { return }
         
         let body: [String: Any] = ["license": license.license, "days": license.days, "used": license.used, "enabled": license.enabled,
                                    "subscription": license.subscription]
@@ -887,7 +887,7 @@ class AppViewModel: ObservableObject {
         self.errorData = nil
         self.requestState = .pending
         
-        guard let url = URL(string: "http://localhost:9000/api/users/\(licenseId)") else { return }
+        guard let url = URL(string: baseUrl + "/licenses/\(licenseId)") else { return }
 
         var request = URLRequest(url: url)
         request.httpMethod = "DELETE"

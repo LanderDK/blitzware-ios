@@ -277,10 +277,10 @@ struct ApplicationDetailView: View {
                 }
             }
         }
-//        .onAppear(perform: {
-//            Task {
-//                await viewModel.getApplicationById(id: application.id)
-//            }
-//        })
+        .onAppear(perform: {
+            Task {
+                await viewModel.getApplicationById(id: application.id)
+            }
+        })
     }
 }

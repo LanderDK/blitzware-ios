@@ -24,6 +24,11 @@
 		4C9260F82B15EAD3006A102E /* UserSubDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9260F72B15EAD3006A102E /* UserSubDataModel.swift */; };
 		4C9260FA2B162604006A102E /* LicenseDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9260F92B162604006A102E /* LicenseDataModel.swift */; };
 		4C9260FC2B16281D006A102E /* LicensesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9260FB2B16281D006A102E /* LicensesView.swift */; };
+		4C92C6772B20D58E00322242 /* UserSubsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C92C6762B20D58E00322242 /* UserSubsView.swift */; };
+		4C92C6792B20DCF200322242 /* FileDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C92C6782B20DCF200322242 /* FileDataModel.swift */; };
+		4C92C67B2B20DFCE00322242 /* FilesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C92C67A2B20DFCE00322242 /* FilesView.swift */; };
+		4C92C67D2B20E41800322242 /* AppLogDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C92C67C2B20E41800322242 /* AppLogDataModel.swift */; };
+		4C92C67F2B20E5D500322242 /* AppLogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C92C67E2B20E5D500322242 /* AppLogsView.swift */; };
 		4CA9D8182AF05CB40076FDD2 /* blitzware_iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA9D8172AF05CB40076FDD2 /* blitzware_iosApp.swift */; };
 		4CA9D81C2AF05CB60076FDD2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CA9D81B2AF05CB60076FDD2 /* Assets.xcassets */; };
 		4CA9D81F2AF05CB60076FDD2 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CA9D81E2AF05CB60076FDD2 /* Preview Assets.xcassets */; };
@@ -53,6 +58,11 @@
 		4C9260F72B15EAD3006A102E /* UserSubDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSubDataModel.swift; sourceTree = "<group>"; };
 		4C9260F92B162604006A102E /* LicenseDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseDataModel.swift; sourceTree = "<group>"; };
 		4C9260FB2B16281D006A102E /* LicensesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicensesView.swift; sourceTree = "<group>"; };
+		4C92C6762B20D58E00322242 /* UserSubsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSubsView.swift; sourceTree = "<group>"; };
+		4C92C6782B20DCF200322242 /* FileDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileDataModel.swift; sourceTree = "<group>"; };
+		4C92C67A2B20DFCE00322242 /* FilesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesView.swift; sourceTree = "<group>"; };
+		4C92C67C2B20E41800322242 /* AppLogDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLogDataModel.swift; sourceTree = "<group>"; };
+		4C92C67E2B20E5D500322242 /* AppLogsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLogsView.swift; sourceTree = "<group>"; };
 		4CA9D8142AF05CB40076FDD2 /* blitzware-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "blitzware-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CA9D8172AF05CB40076FDD2 /* blitzware_iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = blitzware_iosApp.swift; sourceTree = "<group>"; };
 		4CA9D81B2AF05CB60076FDD2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -94,7 +104,7 @@
 				4C9261022B16363C006A102E /* License */,
 				4C9261042B16368B006A102E /* UserSub */,
 				4C9261052B1636C7006A102E /* File */,
-				4C9261062B16370D006A102E /* Log */,
+				4C9261062B16370D006A102E /* AppLog */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -154,6 +164,7 @@
 		4C9261042B16368B006A102E /* UserSub */ = {
 			isa = PBXGroup;
 			children = (
+				4C92C6762B20D58E00322242 /* UserSubsView.swift */,
 			);
 			path = UserSub;
 			sourceTree = "<group>";
@@ -161,15 +172,17 @@
 		4C9261052B1636C7006A102E /* File */ = {
 			isa = PBXGroup;
 			children = (
+				4C92C67A2B20DFCE00322242 /* FilesView.swift */,
 			);
 			path = File;
 			sourceTree = "<group>";
 		};
-		4C9261062B16370D006A102E /* Log */ = {
+		4C9261062B16370D006A102E /* AppLog */ = {
 			isa = PBXGroup;
 			children = (
+				4C92C67E2B20E5D500322242 /* AppLogsView.swift */,
 			);
-			path = Log;
+			path = AppLog;
 			sourceTree = "<group>";
 		};
 		4C9261072B163734006A102E /* Admin */ = {
@@ -230,6 +243,8 @@
 				4C9260F52B125DB1006A102E /* UserDataModel.swift */,
 				4C9260F72B15EAD3006A102E /* UserSubDataModel.swift */,
 				4C9260F92B162604006A102E /* LicenseDataModel.swift */,
+				4C92C6782B20DCF200322242 /* FileDataModel.swift */,
+				4C92C67C2B20E41800322242 /* AppLogDataModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -341,11 +356,14 @@
 			files = (
 				4CA9D83B2AF247060076FDD2 /* ApplicationDataModel.swift in Sources */,
 				4C13BF752B03E23600C29950 /* AccountDetailsView.swift in Sources */,
+				4C92C6772B20D58E00322242 /* UserSubsView.swift in Sources */,
 				4C13BF792B04DBF700C29950 /* LogDataModel.swift in Sources */,
 				4C13BF662AFD221C00C29950 /* ExtentionsView.swift in Sources */,
 				4C13BF6C2B022A4400C29950 /* ChatMessageDataModel.swift in Sources */,
+				4C92C67D2B20E41800322242 /* AppLogDataModel.swift in Sources */,
 				4C13BF6A2B02279E00C29950 /* CommunityView.swift in Sources */,
 				4C9260FC2B16281D006A102E /* LicensesView.swift in Sources */,
+				4C92C67F2B20E5D500322242 /* AppLogsView.swift in Sources */,
 				4CA9D8392AF245DC0076FDD2 /* AccountDataModel.swift in Sources */,
 				4C9260F82B15EAD3006A102E /* UserSubDataModel.swift in Sources */,
 				4C13BF682AFD227600C29950 /* ResourcesView.swift in Sources */,
@@ -355,6 +373,8 @@
 				4CA9D8182AF05CB40076FDD2 /* blitzware_iosApp.swift in Sources */,
 				4C13BF772B03E24900C29950 /* AdminPanelView.swift in Sources */,
 				4CE9FAA52B08C81F009E38E4 /* ApplicationDetailView.swift in Sources */,
+				4C92C67B2B20DFCE00322242 /* FilesView.swift in Sources */,
+				4C92C6792B20DCF200322242 /* FileDataModel.swift in Sources */,
 				4C13BF642AFD214100C29950 /* AuthenticationView.swift in Sources */,
 				4CA9D83D2AF247490076FDD2 /* ErrorDataModel.swift in Sources */,
 				4C9260F42B12571F006A102E /* UsersView.swift in Sources */,

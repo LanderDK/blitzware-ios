@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct AccountMenuView: View {
+    @EnvironmentObject var viewModel: AppViewModel
     @State private var showingLogoutAlert = false
     
     var body: some View {
@@ -26,7 +27,6 @@ struct AccountMenuView: View {
                 }
                 
                 Button(action: {
-//                    logout()
                     showingLogoutAlert = true
                 }) {
                     Text("Logout")
@@ -47,6 +47,8 @@ struct AccountMenuView: View {
     
     func logout() {
         print("Logging out...")
-        // TODO: - IMPLEMENT LOGOUT
+        viewModel.errorData = nil
+        viewModel.requestState = .none
+        viewModel.isAuthed = false
     }
 }

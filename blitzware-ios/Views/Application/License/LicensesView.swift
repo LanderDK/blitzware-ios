@@ -15,7 +15,7 @@ struct LicensesList: View {
     @State private var isShowingAddSheet = false
     @State private var isShowingEditSheet = false
     var application: ApplicationData
-    @State var licenseToEdit: LicenseDataMutate?
+    @State private var licenseToEdit: LicenseDataMutate = LicenseDataMutate(id: "", license: "", days: 0, used: 0, enabled: 0)
     
     var body: some View {
         VStack {
@@ -124,7 +124,7 @@ struct LicensesList: View {
                 AddLicenseView(isPresented: $isShowingAddSheet)
             }
             .sheet(isPresented: $isShowingEditSheet) {
-                EditLicenseView(license: licenseToEdit!, isPresented: $isShowingEditSheet)
+                EditLicenseView(license: licenseToEdit, isPresented: $isShowingEditSheet)
             }
         }
     }
@@ -179,23 +179,24 @@ struct EditLicenseView: View {
                     get: { String(self.days) },
                     set: { if let value = Int($0) { self.days = value } }
                 ))
-                DropDownInputBool(label: "Used", name: "used", options: options, selectedOption: $used)
-                    .frame(width: 200)
-                DropDownInputBool(label: "Enabled", name: "enabled", options: options, selectedOption: $enabled)
-                    .frame(width: 200)
+//                DropDownInputBool(label: "Used", name: "used", options: options, selectedOption: $used)
+//                    .frame(width: 200)
+//                DropDownInputBool(label: "Enabled", name: "enabled", options: options, selectedOption: $enabled)
+//                    .frame(width: 200)
                 Picker("Subscription level", selection: $subscription) {
                     ForEach(viewModel.userSubs, id: \.self) { userSub in
-                        Text("\(userSub.name) (\(userSub.level)")
+                        Text("\(userSub.name) (\(userSub.level))").tag(userSub.id)
                     }
                 }
-                .pickerStyle(SegmentedPickerStyle())
+                .pickerStyle(MenuPickerStyle())
                 
             }
-        }.onDisappear(perform: {
-            Task {
-                await viewModel.getLicensesOfApplication(applicationId: viewModel.licenses.first(where: {$0.id == license.id})!.application.id)
-            }
-        })
+        }
+//        .onDisappear(perform: {
+//            Task {
+//                await viewModel.getLicensesOfApplication(applicationId: viewModel.licenses.first(where: {$0.id == license.id})!.application.id)
+//            }
+//        })
     }
 }
 
@@ -226,7 +227,7 @@ struct AddLicenseView: View {
                     .padding()
                 Spacer()
                 Button("Create") {
-                    if days != 0 || amount != 0 || subscription != 0 {
+                    if days != 0 && amount != 0 && subscription != 0 {
                         Task {
                             if !prefix.isEmpty && prefix != "" {
                                 format = format.replacingOccurrences(of: "PREFIX", with: prefix)
@@ -241,22 +242,31 @@ struct AddLicenseView: View {
             .padding()
             
             Form {
-                TextField("Days", text: Binding<String>(
-                    get: { String(self.days) },
-                    set: { if let value = Int($0) { self.days = value } }
-                ))
+                HStack {
+                    Text("Days")
+                    Spacer()
+                    TextField("Days", text: Binding<String>(
+                        get: { String(self.days) },
+                        set: { if let value = Int($0) { self.days = value } }
+                    ))
+                }
                 DropdownInputString(label: "Format", name: "format", options: options, selectedOption: $format)
                 TextField("Prefix", text: $prefix)
-                TextField("Amount", text: Binding<String>(
-                    get: { String(self.amount) },
-                    set: { if let value = Int($0) { self.amount = value } }
-                ))
+                HStack {
+                    Text("Amount")
+                    Spacer()
+                    TextField("Amount", text: Binding<String>(
+                        get: { String(self.amount) },
+                        set: { if let value = Int($0) { self.amount = value } }
+                    ))
+                }
                 Picker("Subscription level", selection: $subscription) {
+                    Text("- Select a sub -")
                     ForEach(viewModel.userSubs, id: \.self) { userSub in
-                        Text("\(userSub.name) (\(userSub.level)")
+                        Text("\(userSub.name) (\(userSub.level))").tag(userSub.id)
                     }
                 }
-                .pickerStyle(SegmentedPickerStyle())
+                .pickerStyle(MenuPickerStyle())
             }
         }
     }
@@ -273,18 +283,38 @@ struct LicenseRowView: View {
                 Text(license.license)
                     .foregroundColor(.primary)
                     .font(.headline)
-                Text("\(license.days)")
-                    .font(.subheadline)
-                ForEach(viewModel.userSubs) { userSub in
-                    if userSub.id == license.userSubId {
-                        Text("\(userSub.name) (\(userSub.level))")
-                            .font(.subheadline)
+                HStack {
+                    Text("Days: ")
+                        .font(.subheadline)
+                        .fontWeight(.bold)
+                    Text("\(license.days)")
+                        .font(.subheadline)
+                }
+                HStack {
+                    Text("Subscription: ")
+                        .font(.subheadline)
+                        .fontWeight(.bold)
+                    ForEach(viewModel.userSubs) { userSub in
+                        if userSub.id == license.userSubId {
+                            Text("\(userSub.name) (\(userSub.level))")
+                                .font(.subheadline)
+                        }
                     }
                 }
-                Text(license.used == 1 ? "Used" : "Not Used")
-                    .font(.subheadline)
-                Text(license.usedBy ?? "N/A")
-                    .font(.subheadline)
+                HStack {
+                    Text("Used: ")
+                        .font(.subheadline)
+                        .fontWeight(.bold)
+                    Text(license.used == 1 ? "Used" : "Not Used")
+                        .font(.subheadline)
+                }
+                HStack {
+                    Text("Used By: ")
+                        .font(.subheadline)
+                        .fontWeight(.bold)
+                    Text(license.usedBy ?? "N/A")
+                        .font(.subheadline)
+                }
             }
         //}
     }

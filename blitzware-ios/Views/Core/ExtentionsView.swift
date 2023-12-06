@@ -7,6 +7,31 @@
 
 import SwiftUI
 
+func formattedDate(_ date: Date) -> String {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "dd MMM yyyy HH:mm"
+    return formatter.string(from: date)
+}
+
+func formatBytes(_ bytesString: String, decimals: Int = 2) -> String? {
+    guard let bytes = Double(bytesString) else {
+        return nil
+    }
+
+    if bytes == 0 {
+        return "0 Bytes"
+    }
+
+    let k = 1024.0
+    let dm = decimals < 0 ? 0 : decimals
+    let sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB"]
+    let i = Int(floor(log(bytes) / log(k)))
+
+    return String(format: "%.\(dm)f %@",
+                  bytes / pow(k, Double(i)),
+                  sizes[i])
+}
+
 struct Constants {
     static let accentColor = Color(red: 253/255, green: 126/255, blue: 20/255)
     static let mainColorLight = Color(red: 255/255, green: 94/255, blue: 0/255)

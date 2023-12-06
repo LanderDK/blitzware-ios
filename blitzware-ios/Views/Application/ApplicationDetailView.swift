@@ -28,17 +28,17 @@ struct BottomNavBarApp: View {
                         Image(systemName: "key.fill")
                         Text("Licenses")
                     }
-                Text("Subscriptions")
+                UserSubsList(application: application)
                     .tabItem {
                         Image(systemName: "gift.fill")
                         Text("Subscriptions")
                     }
-                Text("Files")
+                FilesList(application: application)
                     .tabItem {
                         Image(systemName: "paperclip")
                         Text("Files")
                     }
-                Text("App Logs")
+                AppLogsList(application: application)
                     .tabItem {
                         Image(systemName: "list.clipboard")
                         Text("App Logs")
@@ -104,6 +104,8 @@ struct ApplicationDetailView: View {
                         .padding(.trailing, 10)
                         .padding(.bottom, 10)
                 }
+                .background(Constants.lightGray)
+                .cornerRadius(15)
                 HStack {
                     Text("Version:")
                         .foregroundColor(.primary)

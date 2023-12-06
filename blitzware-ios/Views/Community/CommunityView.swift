@@ -39,12 +39,6 @@ struct ChatMsg: View {
         .padding(.horizontal)
         .padding(.vertical, 5)
     }
-
-    private func formattedDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd MMM yyyy HH:mm"
-        return formatter.string(from: date)
-    }
 }
 
 struct ChatList: View {

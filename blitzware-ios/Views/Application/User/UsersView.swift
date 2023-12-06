@@ -15,7 +15,7 @@ struct UsersList: View {
     @State private var isShowingAddSheet = false
     @State private var isShowingEditSheet = false
     var application: ApplicationData
-    @State var userToEdit: UserDataMutate?
+    @State private var userToEdit: UserDataMutate = UserDataMutate(id: "", username: "", email: "", expiryDate: Date(), hwid: "", twoFactorAuth: 0, enabled: 0)
     
     var body: some View {
         VStack {
@@ -139,7 +139,7 @@ struct UsersList: View {
                 AddUserView(isPresented: $isShowingAddSheet)
             }
             .sheet(isPresented: $isShowingEditSheet) {
-                EditUserView(user: userToEdit!, isPresented: $isShowingEditSheet)
+                EditUserView(user: userToEdit, isPresented: $isShowingEditSheet)
             }
         }
     }
@@ -159,6 +159,7 @@ struct EditUserView: View {
     private let options = ["0", "1"]
 
     init(user: UserDataMutate, isPresented: Binding<Bool>) {
+        print("User: \(user)")
         self._user = State(initialValue: user)
         self._username = State(initialValue: user.username)
         self._email = State(initialValue: user.email)
@@ -188,33 +189,31 @@ struct EditUserView: View {
                     }
                     isPresented = false
                 }
-            }
-            .padding()
-            
+            }.padding()
             Form {
                 TextField("Username", text: $username)
                 TextField("Email", text: $email)
                 DatePicker("Expiry date", selection: $expiryDate, displayedComponents: [.date, .hourAndMinute])
                     .datePickerStyle(DefaultDatePickerStyle())
-                    .labelsHidden()
                 TextField("Hardware-ID", text: $hwid)
-                DropDownInputBool(label: "2FA", name: "twoFactorAuth", options: options, selectedOption: $twoFactorAuth)
-                    .frame(width: 200)
-                DropDownInputBool(label: "Enabled", name: "enabled", options: options, selectedOption: $enabled)
-                    .frame(width: 200)
+//                DropDownInputBool(label: "2FA", name: "twoFactorAuth", options: options, selectedOption: $twoFactorAuth)
+//                    .frame(width: 200)
+//                DropDownInputBool(label: "Enabled", name: "enabled", options: options, selectedOption: $enabled)
+//                    .frame(width: 200)
                 Picker("Subscription level", selection: $subscription) {
                     ForEach(viewModel.userSubs, id: \.self) { userSub in
-                        Text("\(userSub.name) (\(userSub.level)")
+                        Text("\(userSub.name) (\(userSub.level))").tag(userSub.id)
                     }
                 }
-                .pickerStyle(SegmentedPickerStyle())
+                .pickerStyle(MenuPickerStyle())
                 
             }
-        }.onDisappear(perform: {
-            Task {
-                await viewModel.getUsersOfApplication(applicationId: viewModel.users.first(where: {$0.username == username})!.application.id)
-            }
-        })
+        }
+//        .onDisappear(perform: {
+//            Task {
+//                await viewModel.getUsersOfApplication(applicationId: viewModel.users.first(where: {$0.username == username})!.application.id)
+//            }
+//        })
     }
 }
 
@@ -240,7 +239,7 @@ struct AddUserView: View {
                     .padding()
                 Spacer()
                 Button("Create") {
-                    if !username.isEmpty || !email.isEmpty || !password.isEmpty || expiryDate != nil || subscription != 0 {
+                    if !username.isEmpty && !email.isEmpty && !password.isEmpty && subscription != 0 {
                         Task {
                             await viewModel.createUserFromDashboard(username: username, email: email, password: password, id: viewModel.applicationData!.id, expiry: expiryDate, subscription: subscription)
                         }
@@ -257,13 +256,13 @@ struct AddUserView: View {
                 SecureField("Password", text: $password)
                 DatePicker("Expiry date", selection: $expiryDate, displayedComponents: [.date, .hourAndMinute])
                     .datePickerStyle(DefaultDatePickerStyle())
-                    .labelsHidden()
                 Picker("Subscription level", selection: $subscription) {
+                    Text("- Select a sub -")
                     ForEach(viewModel.userSubs, id: \.self) { userSub in
-                        Text("\(userSub.name) (\(userSub.level)")
+                        Text("\(userSub.name) (\(userSub.level))").tag(userSub.id)
                     }
                 }
-                .pickerStyle(SegmentedPickerStyle())
+                .pickerStyle(MenuPickerStyle())
                 
             }
         }
@@ -279,28 +278,56 @@ struct UserRowView: View {
     var user: UserData
 
     var body: some View {
-        //NavigationLink(destination: BottomNavBarApp(application: application)) {
-            VStack(alignment: .leading, spacing: 3) {
-                Text(user.username)
-                    .foregroundColor(.primary)
-                    .font(.headline)
+        VStack(alignment: .leading, spacing: 3) {
+            Text(user.username)
+                .foregroundColor(.primary)
+                .font(.headline)
+            HStack {
+                Text("Email: ")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
                 Text(user.email)
                     .font(.subheadline)
+            }
+            HStack {
+                Text("Expiry: ")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
                 Text(user.expiryDateString)
                     .font(.subheadline)
+            }
+            HStack {
+                Text("Subscription: ")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
                 ForEach(viewModel.userSubs) { userSub in
                     if userSub.id == user.userSubId {
                         Text("\(userSub.name) (\(userSub.level))")
                             .font(.subheadline)
                     }
                 }
+            }
+            HStack {
+                Text("Last Login: ")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
                 Text(user.lastLoginString)
                     .font(.subheadline)
+            }
+            HStack {
+                Text("IP: ")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
                 Text(user.lastIP)
                     .font(.subheadline)
+            }
+            HStack {
+                Text("HWID: ")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
                 Text(user.hwid)
                     .font(.subheadline)
             }
-        //}
+        }
     }
 }

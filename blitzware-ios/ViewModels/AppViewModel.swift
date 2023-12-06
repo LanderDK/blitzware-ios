@@ -9,6 +9,8 @@ class AppViewModel: ObservableObject {
     @Published var users: [UserData] = []
     @Published var userSubs: [UserSubData] = []
     @Published var licenses: [LicenseData] = []
+    @Published var files: [FileData] = []
+    @Published var appLogs: [AppLogData] = []
     @Published var requestState: RequestState = .none
     @Published var errorData: ErrorData?
     @Published var isAuthed: Bool = false
@@ -126,7 +128,7 @@ class AppViewModel: ObservableObject {
                 print("Raw Response Data:\n\(responseString ?? "Empty")")
                 
                 if let httpResponse = response as? HTTPURLResponse {
-                    if httpResponse.statusCode == 200 {
+                    if httpResponse.statusCode == 204 {
                         self.requestState = .success
                     } else {
                         let result = try JSONDecoder().decode(ErrorData.self, from: data)
@@ -215,7 +217,7 @@ class AppViewModel: ObservableObject {
                 print("Raw Response Data:\n\(responseString ?? "Empty")")
                 
                 if let httpResponse = response as? HTTPURLResponse {
-                    if httpResponse.statusCode == 200 {
+                    if httpResponse.statusCode == 204 {
                         self.requestState = .success
                     } else {
                         let result = try JSONDecoder().decode(ErrorData.self, from: data)
@@ -591,7 +593,11 @@ class AppViewModel: ObservableObject {
         
         guard let url = URL(string: baseUrl + "/users/registerFromDashboard") else { return }
         
-        let body: [String: Any] = ["username": username, "email": email, "password": password, "id": id, "expiry": expiry,
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        let formattedDateString = dateFormatter.string(from: expiry)
+        
+        let body: [String: Any] = ["username": username, "email": email, "password": password, "id": id, "expiry": formattedDateString,
                                    "subscription": subscription]
         
         do {
@@ -636,7 +642,11 @@ class AppViewModel: ObservableObject {
         
         guard let url = URL(string: baseUrl + "/users/\(user.id)") else { return }
         
-        let body: [String: Any] = ["username": user.username, "email": user.email, "expiryDate": user.expiryDate, "hwid": user.hwid,
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        let formattedDateString = dateFormatter.string(from: user.expiryDate)
+        
+        let body: [String: Any] = ["username": user.username, "email": user.email, "expiryDate": formattedDateString, "hwid": user.hwid,
                                    "twoFactorAuth": user.twoFactorAuth, "enabled": user.enabled, "subscription": user.subscription]
         
         do {
@@ -652,11 +662,11 @@ class AppViewModel: ObservableObject {
                 let (data, response) = try await URLSession.shared.data(for: request)
                 self.requestState = .sent
                 
-                let responseString = String(data: data, encoding: .utf8)
-                print("Raw Response Data:\n\(responseString ?? "Empty")")
+//                let responseString = String(data: data, encoding: .utf8)
+//                print("Raw Response Data:\n\(responseString ?? "Empty")")
                 
                 if let httpResponse = response as? HTTPURLResponse {
-                    if httpResponse.statusCode == 200 {
+                    if httpResponse.statusCode == 204 {
                         self.requestState = .success
                     } else {
                         let result = try JSONDecoder().decode(ErrorData.self, from: data)
@@ -751,6 +761,129 @@ class AppViewModel: ObservableObject {
         }
     }
     
+    func createUserSub(name: String, level: Int, applicationId: String) async {
+        self.errorData = nil
+        self.requestState = .pending
+        
+        guard let url = URL(string: baseUrl + "/userSubs") else { return }
+        
+        let body: [String: Any] = ["name": name, "level": level, "applicationId": applicationId]
+        
+        do {
+            let finalData = try JSONSerialization.data(withJSONObject: body)
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.httpBody = finalData
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+            
+            do {
+                let (data, response) = try await URLSession.shared.data(for: request)
+                self.requestState = .sent
+                
+                if let httpResponse = response as? HTTPURLResponse {
+                    if httpResponse.statusCode == 201 {
+                        let result = try JSONDecoder().decode(UserSubData.self, from: data)
+                        self.requestState = .success
+                        self.userSubs.append(result)
+                    } else {
+                        let result = try JSONDecoder().decode(ErrorData.self, from: data)
+                        self.errorData = result
+                        self.requestState = .error
+                    }
+                }
+            } catch {
+                print("Error fetching data: \(error)")
+                self.requestState = .error
+                self.errorData = ErrorData(code: "FETCH_ERROR", message: "Error fetching data: \(error.localizedDescription)")
+            }
+        } catch {
+            print("Error serializing JSON: \(error.localizedDescription)")
+            self.requestState = .error
+            self.errorData = ErrorData(code: "CATCH_ERROR", message: "Error serializing JSON: \(error.localizedDescription)")
+        }
+    }
+    
+    func updateUserSubById(userSub: UserSubData) async {
+        self.errorData = nil
+        self.requestState = .pending
+        
+        guard let url = URL(string: baseUrl + "/userSubs/\(userSub.id)") else { return }
+        
+        let body: [String: Any] = ["name": userSub.name, "level": userSub.level, "applicationId": userSub.applicationId]
+        
+        do {
+            let finalData = try JSONSerialization.data(withJSONObject: body)
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "PUT"
+            request.httpBody = finalData
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+            
+            do {
+                let (data, response) = try await URLSession.shared.data(for: request)
+                self.requestState = .sent
+                
+//                let responseString = String(data: data, encoding: .utf8)
+//                print("Raw Response Data:\n\(responseString ?? "Empty")")
+                
+                if let httpResponse = response as? HTTPURLResponse {
+                    if httpResponse.statusCode == 204 {
+                        self.requestState = .success
+                    } else {
+                        let result = try JSONDecoder().decode(ErrorData.self, from: data)
+                        self.errorData = result
+                        self.requestState = .error
+                    }
+                }
+            } catch {
+                print("Error fetching data: \(error)")
+                self.requestState = .error
+                self.errorData = ErrorData(code: "FETCH_ERROR", message: "Error fetching data: \(error.localizedDescription)")
+            }
+        } catch {
+            print("Error serializing JSON: \(error.localizedDescription)")
+            self.requestState = .error
+            self.errorData = ErrorData(code: "CATCH_ERROR", message: "Error serializing JSON: \(error.localizedDescription)")
+        }
+    }
+    
+    func deleteUserSubById(userSubId: Int) async {
+        self.errorData = nil
+        self.requestState = .pending
+        
+        guard let url = URL(string: baseUrl + "/userSubs/\(userSubId)") else { return }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            self.requestState = .sent
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                if httpResponse.statusCode == 204 {
+                    self.requestState = .success
+                    if let index = self.userSubs.firstIndex(where: { $0.id == userSubId }) {
+                        self.userSubs.remove(at: index)
+                    }
+                } else {
+                    let result = try JSONDecoder().decode(ErrorData.self, from: data)
+                    self.errorData = result
+                    self.requestState = .error
+                }
+            }
+        } catch {
+            print("Error fetching data: \(error)")
+            self.requestState = .error
+            self.errorData = ErrorData(code: "FETCH_ERROR", message: "Error fetching data: \(error.localizedDescription)")
+        }
+    }
+    
     
     // MARK: - License request functions
     
@@ -814,9 +947,11 @@ class AppViewModel: ObservableObject {
                 
                 if let httpResponse = response as? HTTPURLResponse {
                     if httpResponse.statusCode == 201 {
-                        let result = try JSONDecoder().decode(LicenseData.self, from: data)
+                        let results = try JSONDecoder().decode([LicenseData].self, from: data)
                         self.requestState = .success
-                        self.licenses.append(result)
+                        for result in results {
+                            self.licenses.append(result)
+                        }
                     } else {
                         let result = try JSONDecoder().decode(ErrorData.self, from: data)
                         self.errorData = result
@@ -857,11 +992,11 @@ class AppViewModel: ObservableObject {
                 let (data, response) = try await URLSession.shared.data(for: request)
                 self.requestState = .sent
                 
-                let responseString = String(data: data, encoding: .utf8)
-                print("Raw Response Data:\n\(responseString ?? "Empty")")
+//                let responseString = String(data: data, encoding: .utf8)
+//                print("Raw Response Data:\n\(responseString ?? "Empty")")
                 
                 if let httpResponse = response as? HTTPURLResponse {
-                    if httpResponse.statusCode == 200 {
+                    if httpResponse.statusCode == 204 {
                         self.requestState = .success
                     } else {
                         let result = try JSONDecoder().decode(ErrorData.self, from: data)
@@ -901,6 +1036,198 @@ class AppViewModel: ObservableObject {
                     self.requestState = .success
                     if let index = self.licenses.firstIndex(where: { $0.id == licenseId }) {
                         self.licenses.remove(at: index)
+                    }
+                } else {
+                    let result = try JSONDecoder().decode(ErrorData.self, from: data)
+                    self.errorData = result
+                    self.requestState = .error
+                }
+            }
+        } catch {
+            print("Error fetching data: \(error)")
+            self.requestState = .error
+            self.errorData = ErrorData(code: "FETCH_ERROR", message: "Error fetching data: \(error.localizedDescription)")
+        }
+    }
+    
+    
+    // MARK: - File request functions
+    
+    func getFilesOfApplication(applicationId: String) async {
+        self.errorData = nil
+        self.requestState = .pending
+        
+        guard let url = URL(string: baseUrl + "/files/app/\(applicationId)") else { return }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            self.requestState = .sent
+//                      let responseString = String(data: data, encoding: .utf8)
+//                      print("Raw Response Data:\n\(responseString ?? "Empty")")
+            
+            if let httpResponse = response as? HTTPURLResponse {
+//                          print("HTTP Status Code: \(httpResponse.statusCode)")
+//                          print("Response Headers: \(httpResponse.allHeaderFields)")
+                if httpResponse.statusCode == 200 {
+                    let decoder = JSONDecoder()
+                    let results = try decoder.decode([FileData].self, from: data)
+                    self.requestState = .success
+                    self.files = results
+                } else {
+                    let result = try JSONDecoder().decode(ErrorData.self, from: data)
+                    self.errorData = result
+                    self.requestState = .error
+                }
+            }
+        } catch {
+            print("Error decoding data: \(error)")
+            self.requestState = .error
+            self.errorData = ErrorData(code: "CATCH_ERROR", message: "Error decoding data: \(error.localizedDescription)")
+        }
+    }
+    
+    func createFile(applicationId: String) async {
+        self.errorData = nil
+        self.requestState = .pending
+        
+        guard let url = URL(string: baseUrl + "/files/upload/\(applicationId)") else { return }
+        
+        let body: [String: Any] = ["file": "file"]
+        
+        do {
+            let finalData = try JSONSerialization.data(withJSONObject: body)
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.httpBody = finalData
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+            
+            do {
+                let (data, response) = try await URLSession.shared.data(for: request)
+                self.requestState = .sent
+                
+                if let httpResponse = response as? HTTPURLResponse {
+                    if httpResponse.statusCode == 201 {
+                        let result = try JSONDecoder().decode(FileData.self, from: data)
+                        self.requestState = .success
+                        self.files.append(result)
+                    } else {
+                        let result = try JSONDecoder().decode(ErrorData.self, from: data)
+                        self.errorData = result
+                        self.requestState = .error
+                    }
+                }
+            } catch {
+                print("Error fetching data: \(error)")
+                self.requestState = .error
+                self.errorData = ErrorData(code: "FETCH_ERROR", message: "Error fetching data: \(error.localizedDescription)")
+            }
+        } catch {
+            print("Error serializing JSON: \(error.localizedDescription)")
+            self.requestState = .error
+            self.errorData = ErrorData(code: "CATCH_ERROR", message: "Error serializing JSON: \(error.localizedDescription)")
+        }
+    }
+    
+    func deleteFileById(fileId: String) async {
+        self.errorData = nil
+        self.requestState = .pending
+        
+        guard let url = URL(string: baseUrl + "/files/\(fileId)") else { return }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            self.requestState = .sent
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                if httpResponse.statusCode == 204 {
+                    self.requestState = .success
+                    if let index = self.files.firstIndex(where: { $0.id == fileId }) {
+                        self.files.remove(at: index)
+                    }
+                } else {
+                    let result = try JSONDecoder().decode(ErrorData.self, from: data)
+                    self.errorData = result
+                    self.requestState = .error
+                }
+            }
+        } catch {
+            print("Error fetching data: \(error)")
+            self.requestState = .error
+            self.errorData = ErrorData(code: "FETCH_ERROR", message: "Error fetching data: \(error.localizedDescription)")
+        }
+    }
+    
+    
+    // MARK: - AppLog request functions
+    
+    func getAppLogsOfApplication(applicationId: String) async {
+        self.errorData = nil
+        self.requestState = .pending
+        
+        guard let url = URL(string: baseUrl + "/appLogs/\(applicationId)") else { return }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            self.requestState = .sent
+//                      let responseString = String(data: data, encoding: .utf8)
+//                      print("Raw Response Data:\n\(responseString ?? "Empty")")
+            
+            if let httpResponse = response as? HTTPURLResponse {
+//                          print("HTTP Status Code: \(httpResponse.statusCode)")
+//                          print("Response Headers: \(httpResponse.allHeaderFields)")
+                if httpResponse.statusCode == 200 {
+                    let decoder = JSONDecoder()
+                    let results = try decoder.decode([AppLogData].self, from: data)
+                    self.requestState = .success
+                    self.appLogs = results
+                } else {
+                    let result = try JSONDecoder().decode(ErrorData.self, from: data)
+                    self.errorData = result
+                    self.requestState = .error
+                }
+            }
+        } catch {
+            print("Error decoding data: \(error)")
+            self.requestState = .error
+            self.errorData = ErrorData(code: "CATCH_ERROR", message: "Error decoding data: \(error.localizedDescription)")
+        }
+    }
+    
+    func deleteAppLogById(appLogId: Int) async {
+        self.errorData = nil
+        self.requestState = .pending
+        
+        guard let url = URL(string: baseUrl + "/appLogs/\(appLogId)") else { return }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            self.requestState = .sent
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                if httpResponse.statusCode == 204 {
+                    self.requestState = .success
+                    if let index = self.appLogs.firstIndex(where: { $0.id == appLogId }) {
+                        self.appLogs.remove(at: index)
                     }
                 } else {
                     let result = try JSONDecoder().decode(ErrorData.self, from: data)

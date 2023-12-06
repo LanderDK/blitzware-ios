@@ -61,31 +61,29 @@ struct ChatList: View {
             if viewModel.requestState == .pending || viewModel.requestState == .sent {
                 ProgressView()
             }
-            else {
-                ScrollView {
-                    ForEach(viewModel.generalChatMsgs, id: \.id) { chatMsg in
-                        ChatMsg(username: chatMsg.username, message: chatMsg.message, date: chatMsg.date, onDelete: {
-                            deleteChatMessage(chatMsg.id)
-                        })
-                    }
+            ScrollView {
+                ForEach(viewModel.generalChatMsgs, id: \.id) { chatMsg in
+                    ChatMsg(username: chatMsg.username, message: chatMsg.message, date: chatMsg.date, onDelete: {
+                        deleteChatMessage(chatMsg.id)
+                    })
                 }
-                HStack {
-                    TextField("Type here, \(viewModel.accountData!.account.username)...", text: $msg)
-                        .padding(10)
-                        .background(Color(UIColor.systemGray6))
-                        .cornerRadius(10)
-                    Button(action: sendMessage) {
-                        Image(systemName: "paperplane.fill")
-                            .font(.title)
-                            .foregroundColor(msg.isEmpty ? .gray : .blue)
-                            .padding(10)
-                    }
+            }
+            HStack {
+                TextField("Type here, \(viewModel.accountData!.account.username)...", text: $msg)
+                    .padding(10)
                     .background(Color(UIColor.systemGray6))
                     .cornerRadius(10)
-                    .disabled(msg.isEmpty)
+                Button(action: sendMessage) {
+                    Image(systemName: "paperplane.fill")
+                        .font(.title)
+                        .foregroundColor(msg.isEmpty ? .gray : .blue)
+                        .padding(10)
                 }
-                .padding()
+                .background(Color(UIColor.systemGray6))
+                .cornerRadius(10)
+                .disabled(msg.isEmpty)
             }
+            .padding()
         }
         .onAppear(perform: {
             Task {
@@ -126,6 +124,6 @@ struct CommunityView: View {
             ChatList()
                 .navigationBarTitle("Community")
         }
-        .navigationViewStyle(StackNavigationViewStyle()) // Use compact navigation style
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }

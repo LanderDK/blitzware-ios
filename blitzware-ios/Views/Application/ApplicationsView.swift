@@ -37,49 +37,49 @@ struct ApplicationsList: View {
                 }
                 if viewModel.requestState == .pending || viewModel.requestState == .sent {
                     ProgressView()
-                } else {
-                    List(viewModel.applications, id: \.id) { application in
-                        ApplicationRowView(application: application)
-                            .contextMenu {
-                                if application.status == 1 {
-                                    CustomButton(title: "Disable") {
-                                        let newApp = ApplicationData(id: application.id, name: application.name, secret: application.secret, status: 0, hwidCheck: application.hwidCheck, developerMode: application.developerMode, integrityCheck: application.integrityCheck, freeMode: application.freeMode, twoFactorAuth: application.twoFactorAuth, programHash: application.programHash, version: application.version, downloadLink: application.downloadLink, adminRoleId: application.adminRoleId, adminRoleLevel: application.adminRoleLevel)
-                                        Task {
-                                            await viewModel.updateApplicationById(application: newApp)
-                                        }
-                                        if let index = viewModel.applications.firstIndex(where: { $0.id == application.id }) {
-                                            viewModel.applications[index].status = 0
-                                        }
+                }
+                List(viewModel.applications, id: \.id) { application in
+                    ApplicationRowView(application: application)
+                        .contextMenu {
+                            if application.status == 1 {
+                                CustomButton(title: "Disable") {
+                                    let newApp = ApplicationData(id: application.id, name: application.name, secret: application.secret, status: 0, hwidCheck: application.hwidCheck, developerMode: application.developerMode, integrityCheck: application.integrityCheck, freeMode: application.freeMode, twoFactorAuth: application.twoFactorAuth, programHash: application.programHash, version: application.version, downloadLink: application.downloadLink, adminRoleId: application.adminRoleId, adminRoleLevel: application.adminRoleLevel)
+                                    Task {
+                                        await viewModel.updateApplicationById(application: newApp)
                                     }
-                                } else {
-                                    CustomButton(title: "Enable") {
-                                        let newApp = ApplicationData(id: application.id, name: application.name, secret: application.secret, status: 1, hwidCheck: application.hwidCheck, developerMode: application.developerMode, integrityCheck: application.integrityCheck, freeMode: application.freeMode, twoFactorAuth: application.twoFactorAuth, programHash: application.programHash, version: application.version, downloadLink: application.downloadLink, adminRoleId: application.adminRoleId, adminRoleLevel: application.adminRoleLevel)
-                                        Task {
-                                            await viewModel.updateApplicationById(application: newApp)
-                                        }
-                                        if let index = viewModel.applications.firstIndex(where: { $0.id == application.id }) {
-                                            viewModel.applications[index].status = 1
-                                        }
+                                    if let index = viewModel.applications.firstIndex(where: { $0.id == application.id }) {
+                                        viewModel.applications[index].status = 0
                                     }
                                 }
-                                CustomButton(title: "Delete") {
+                            } else {
+                                CustomButton(title: "Enable") {
+                                    let newApp = ApplicationData(id: application.id, name: application.name, secret: application.secret, status: 1, hwidCheck: application.hwidCheck, developerMode: application.developerMode, integrityCheck: application.integrityCheck, freeMode: application.freeMode, twoFactorAuth: application.twoFactorAuth, programHash: application.programHash, version: application.version, downloadLink: application.downloadLink, adminRoleId: application.adminRoleId, adminRoleLevel: application.adminRoleLevel)
                                     Task {
-                                        await viewModel.deleteApplicationById(applicationId: application.id)
-                                        if viewModel.requestState == .success {
-                                            alertTitle = "Success!"
-                                            alertMessage = "Application deleted successfully."
-                                            isShowingAlert = true
-                                        } else {
-                                            alertTitle = "Oops!"
-                                            alertMessage = viewModel.errorData?.message ?? "Unkown error"
-                                            isShowingAlert = true
-                                        }
+                                        await viewModel.updateApplicationById(application: newApp)
+                                    }
+                                    if let index = viewModel.applications.firstIndex(where: { $0.id == application.id }) {
+                                        viewModel.applications[index].status = 1
                                     }
                                 }
                             }
-                    }
+                            CustomButton(title: "Delete") {
+                                Task {
+                                    await viewModel.deleteApplicationById(applicationId: application.id)
+                                    if viewModel.requestState == .success {
+                                        alertTitle = "Success!"
+                                        alertMessage = "Application deleted successfully."
+                                        isShowingAlert = true
+                                    } else {
+                                        alertTitle = "Oops!"
+                                        alertMessage = viewModel.errorData?.message ?? "Unkown error"
+                                        isShowingAlert = true
+                                    }
+                                }
+                            }
+                        }
                 }
-            }.onAppear(perform: {
+            }
+            .onAppear(perform: {
                 Task {
                     await viewModel.getApplicationsOfAccount()
                 }
@@ -94,9 +94,6 @@ struct ApplicationsList: View {
             .sheet(isPresented: $isShowingAddSheet) {
                 AddApplicationView(isPresented: $isShowingAddSheet)
             }
-//            .sheet(isPresented: $viewModel.isShowingDetailSheet) {
-//                ApplicationDetailView(applicationId: viewModel.selectedAppId!, isPresented: $viewModel.isShowingDetailSheet)
-//            }
         }
     }
 }

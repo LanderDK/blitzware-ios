@@ -40,63 +40,48 @@ struct LicensesList: View {
                 }
                 if viewModel.requestState == .pending || viewModel.requestState == .sent {
                     ProgressView()
-                } else {
-                    List(viewModel.licenses, id: \.id) { license in
-                        LicenseRowView(license: license)
-                            .contextMenu {
-                                CustomButton(title: "Edit") {
-                                    licenseToEdit = LicenseDataMutate(id: license.id, license: license.license, days: license.days,
-                                                                      used: license.used, enabled: license.enabled,
-                                                                      subscription: license.userSubId)
-                                    isShowingEditSheet = true
-                                }
-                                if license.enabled == 1 {
-                                    CustomButton(title: "Ban") {
-                                        let newLicense = LicenseDataMutate(id: license.id, license: license.license, days: license.days,
-                                                                           used: license.used, enabled: 0, subscription: license.userSubId)
-                                        Task {
-                                            await viewModel.updateLicenseById(license: newLicense)
-                                            if viewModel.requestState == .success {
-                                                if let index = viewModel.licenses.firstIndex(where: { $0.id == license.id }) {
-                                                    viewModel.licenses[index].enabled = 0
-                                                }
-                                                alertTitle = "Success!"
-                                                alertMessage = "License banned successfully."
-                                                isShowingAlert = true
-                                            } else {
-                                                alertTitle = "Oops!"
-                                                alertMessage = viewModel.errorData?.message ?? "Unkown error"
-                                                isShowingAlert = true
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    CustomButton(title: "Unban") {
-                                        let newLicense = LicenseDataMutate(id: license.id, license: license.license, days: license.days,
-                                                                           used: license.used, enabled: 1, subscription: license.userSubId)
-                                        Task {
-                                            await viewModel.updateLicenseById(license: newLicense)
-                                            if viewModel.requestState == .success {
-                                                if let index = viewModel.licenses.firstIndex(where: { $0.id == license.id }) {
-                                                    viewModel.licenses[index].enabled = 1
-                                                }
-                                                alertTitle = "Success!"
-                                                alertMessage = "License unbanned successfully."
-                                                isShowingAlert = true
-                                            } else {
-                                                alertTitle = "Oops!"
-                                                alertMessage = viewModel.errorData?.message ?? "Unkown error"
-                                                isShowingAlert = true
-                                            }
-                                        }
-                                    }
-                                }
-                                CustomButton(title: "Delete") {
+                }
+                List(viewModel.licenses, id: \.id) { license in
+                    LicenseRowView(license: license)
+                        .contextMenu {
+                            CustomButton(title: "Edit") {
+                                licenseToEdit = LicenseDataMutate(id: license.id, license: license.license, days: license.days,
+                                                                  used: license.used, enabled: license.enabled,
+                                                                  subscription: license.userSubId)
+                                isShowingEditSheet = true
+                            }
+                            if license.enabled == 1 {
+                                CustomButton(title: "Ban") {
+                                    let newLicense = LicenseDataMutate(id: license.id, license: license.license, days: license.days,
+                                                                       used: license.used, enabled: 0, subscription: license.userSubId)
                                     Task {
-                                        await viewModel.deleteLicenseById(licenseId: license.id)
+                                        await viewModel.updateLicenseById(license: newLicense)
                                         if viewModel.requestState == .success {
+                                            if let index = viewModel.licenses.firstIndex(where: { $0.id == license.id }) {
+                                                viewModel.licenses[index].enabled = 0
+                                            }
                                             alertTitle = "Success!"
-                                            alertMessage = "License deleted successfully."
+                                            alertMessage = "License banned successfully."
+                                            isShowingAlert = true
+                                        } else {
+                                            alertTitle = "Oops!"
+                                            alertMessage = viewModel.errorData?.message ?? "Unkown error"
+                                            isShowingAlert = true
+                                        }
+                                    }
+                                }
+                            } else {
+                                CustomButton(title: "Unban") {
+                                    let newLicense = LicenseDataMutate(id: license.id, license: license.license, days: license.days,
+                                                                       used: license.used, enabled: 1, subscription: license.userSubId)
+                                    Task {
+                                        await viewModel.updateLicenseById(license: newLicense)
+                                        if viewModel.requestState == .success {
+                                            if let index = viewModel.licenses.firstIndex(where: { $0.id == license.id }) {
+                                                viewModel.licenses[index].enabled = 1
+                                            }
+                                            alertTitle = "Success!"
+                                            alertMessage = "License unbanned successfully."
                                             isShowingAlert = true
                                         } else {
                                             alertTitle = "Oops!"
@@ -106,7 +91,21 @@ struct LicensesList: View {
                                     }
                                 }
                             }
-                    }
+                            CustomButton(title: "Delete") {
+                                Task {
+                                    await viewModel.deleteLicenseById(licenseId: license.id)
+                                    if viewModel.requestState == .success {
+                                        alertTitle = "Success!"
+                                        alertMessage = "License deleted successfully."
+                                        isShowingAlert = true
+                                    } else {
+                                        alertTitle = "Oops!"
+                                        alertMessage = viewModel.errorData?.message ?? "Unkown error"
+                                        isShowingAlert = true
+                                    }
+                                }
+                            }
+                        }
                 }
             }.onAppear(perform: {
                 Task {

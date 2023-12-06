@@ -56,13 +56,11 @@ struct LogList: View {
             if viewModel.requestState == .pending || viewModel.requestState == .sent {
                 ProgressView()
             }
-            else {
-                ScrollView {
-                    ForEach(viewModel.individualAccountLogs, id: \.id) { log in
-                        LogView(date: log.date, action: log.action, message: log.message, onDelete: {
-                            deleteLog(log.id)
-                        })
-                    }
+            ScrollView {
+                ForEach(viewModel.individualAccountLogs, id: \.id) { log in
+                    LogView(date: log.date, action: log.action, message: log.message, onDelete: {
+                        deleteLog(log.id)
+                    })
                 }
             }
         }

@@ -40,25 +40,44 @@ struct UsersList: View {
                 }
                 if viewModel.requestState == .pending || viewModel.requestState == .sent {
                     ProgressView()
-                } else {
-                    List(viewModel.users, id: \.id) { user in
-                        UserRowView(user: user)
-                            .contextMenu {
-                                CustomButton(title: "Edit") {
-                                    userToEdit = UserDataMutate(id: user.id, username: user.username, email: user.email, expiryDate: user.expiryDate, hwid: user.hwid, twoFactorAuth: user.twoFactorAuth, enabled: user.enabled, subscription: user.userSubId)
-                                    isShowingEditSheet = true
+                }
+                List(viewModel.users, id: \.id) { user in
+                    UserRowView(user: user)
+                        .contextMenu {
+                            CustomButton(title: "Edit") {
+                                userToEdit = UserDataMutate(id: user.id, username: user.username, email: user.email, expiryDate: user.expiryDate, hwid: user.hwid, twoFactorAuth: user.twoFactorAuth, enabled: user.enabled, subscription: user.userSubId)
+                                isShowingEditSheet = true
+                            }
+                            
+                            CustomButton(title: "Reset HWID") {
+                                let newUser = UserDataMutate(id: user.id, username: user.username, email: user.email, expiryDate: user.expiryDate, hwid: "RESET", twoFactorAuth: user.twoFactorAuth, enabled: user.enabled, subscription: user.userSubId)
+                                Task {
+                                    await viewModel.updateUserById(user: newUser)
+                                    if viewModel.requestState == .success {
+                                        if let index = viewModel.users.firstIndex(where: { $0.id == user.id }) {
+                                            viewModel.users[index].hwid = "RESET"
+                                        }
+                                        alertTitle = "Success!"
+                                        alertMessage = "User resetted successfully."
+                                        isShowingAlert = true
+                                    } else {
+                                        alertTitle = "Oops!"
+                                        alertMessage = viewModel.errorData?.message ?? "Unkown error"
+                                        isShowingAlert = true
+                                    }
                                 }
-                                
-                                CustomButton(title: "Reset HWID") {
-                                    let newUser = UserDataMutate(id: user.id, username: user.username, email: user.email, expiryDate: user.expiryDate, hwid: "RESET", twoFactorAuth: user.twoFactorAuth, enabled: user.enabled, subscription: user.userSubId)
+                            }
+                            if user.enabled == 1 {
+                                CustomButton(title: "Ban") {
+                                    let newUser = UserDataMutate(id: user.id, username: user.username, email: user.email, expiryDate: user.expiryDate, hwid: user.hwid, twoFactorAuth: user.twoFactorAuth, enabled: 0, subscription: user.userSubId)
                                     Task {
                                         await viewModel.updateUserById(user: newUser)
                                         if viewModel.requestState == .success {
                                             if let index = viewModel.users.firstIndex(where: { $0.id == user.id }) {
-                                                viewModel.users[index].hwid = "RESET"
+                                                viewModel.users[index].enabled = 0
                                             }
                                             alertTitle = "Success!"
-                                            alertMessage = "User resetted successfully."
+                                            alertMessage = "User banned successfully."
                                             isShowingAlert = true
                                         } else {
                                             alertTitle = "Oops!"
@@ -67,51 +86,17 @@ struct UsersList: View {
                                         }
                                     }
                                 }
-                                if user.enabled == 1 {
-                                    CustomButton(title: "Ban") {
-                                        let newUser = UserDataMutate(id: user.id, username: user.username, email: user.email, expiryDate: user.expiryDate, hwid: user.hwid, twoFactorAuth: user.twoFactorAuth, enabled: 0, subscription: user.userSubId)
-                                        Task {
-                                            await viewModel.updateUserById(user: newUser)
-                                            if viewModel.requestState == .success {
-                                                if let index = viewModel.users.firstIndex(where: { $0.id == user.id }) {
-                                                    viewModel.users[index].enabled = 0
-                                                }
-                                                alertTitle = "Success!"
-                                                alertMessage = "User banned successfully."
-                                                isShowingAlert = true
-                                            } else {
-                                                alertTitle = "Oops!"
-                                                alertMessage = viewModel.errorData?.message ?? "Unkown error"
-                                                isShowingAlert = true
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    CustomButton(title: "Unban") {
-                                        let newUser = UserDataMutate(id: user.id, username: user.username, email: user.email, expiryDate: user.expiryDate, hwid: "RESET", twoFactorAuth: user.twoFactorAuth, enabled: 1, subscription: user.userSubId)
-                                        Task {
-                                            await viewModel.updateUserById(user: newUser)
-                                            if viewModel.requestState == .success {
-                                                if let index = viewModel.users.firstIndex(where: { $0.id == user.id }) {
-                                                    viewModel.users[index].enabled = 1
-                                                }
-                                                alertTitle = "Success!"
-                                                alertMessage = "User unbanned successfully."
-                                                isShowingAlert = true
-                                            } else {
-                                                alertTitle = "Oops!"
-                                                alertMessage = viewModel.errorData?.message ?? "Unkown error"
-                                                isShowingAlert = true
-                                            }
-                                        }
-                                    }
-                                }
-                                CustomButton(title: "Delete") {
+                            } else {
+                                CustomButton(title: "Unban") {
+                                    let newUser = UserDataMutate(id: user.id, username: user.username, email: user.email, expiryDate: user.expiryDate, hwid: "RESET", twoFactorAuth: user.twoFactorAuth, enabled: 1, subscription: user.userSubId)
                                     Task {
-                                        await viewModel.deleteUserById(userId: user.id)
+                                        await viewModel.updateUserById(user: newUser)
                                         if viewModel.requestState == .success {
+                                            if let index = viewModel.users.firstIndex(where: { $0.id == user.id }) {
+                                                viewModel.users[index].enabled = 1
+                                            }
                                             alertTitle = "Success!"
-                                            alertMessage = "User deleted successfully."
+                                            alertMessage = "User unbanned successfully."
                                             isShowingAlert = true
                                         } else {
                                             alertTitle = "Oops!"
@@ -121,7 +106,21 @@ struct UsersList: View {
                                     }
                                 }
                             }
-                    }
+                            CustomButton(title: "Delete") {
+                                Task {
+                                    await viewModel.deleteUserById(userId: user.id)
+                                    if viewModel.requestState == .success {
+                                        alertTitle = "Success!"
+                                        alertMessage = "User deleted successfully."
+                                        isShowingAlert = true
+                                    } else {
+                                        alertTitle = "Oops!"
+                                        alertMessage = viewModel.errorData?.message ?? "Unkown error"
+                                        isShowingAlert = true
+                                    }
+                                }
+                            }
+                        }
                 }
             }.onAppear(perform: {
                 Task {

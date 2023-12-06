@@ -4,8 +4,6 @@ class AppViewModel: ObservableObject {
     @Published var accountData: AccountLoginData?
     @Published var applications: [ApplicationData] = []
     @Published var applicationData: ApplicationData?
-    @Published var selectedAppId: String?
-    @Published var isShowingDetailSheet: Bool = false
     @Published var generalChatMsgs: [ChatMessageData] = []
     @Published var individualAccountLogs: [LogData] = []
     @Published var users: [UserData] = []
@@ -14,7 +12,7 @@ class AppViewModel: ObservableObject {
     @Published var requestState: RequestState = .none
     @Published var errorData: ErrorData?
     @Published var isAuthed: Bool = false
-    private var baseUrl: String = "https://api.blitzware.xyz/api"
+    private var baseUrl: String = "http://localhost:9000/api"
     
     // MARK: - Account request functions
     
@@ -43,8 +41,8 @@ class AppViewModel: ObservableObject {
                 if let httpResponse = response as? HTTPURLResponse {
                     if httpResponse.statusCode == 200 {
                         let result = try JSONDecoder().decode(AccountLoginData.self, from: data)
-                        self.accountData = result
                         self.requestState = .success
+                        self.accountData = result
                         self.isAuthed = true
                     } else {
                         let result = try JSONDecoder().decode(ErrorData.self, from: data)
@@ -87,8 +85,8 @@ class AppViewModel: ObservableObject {
                 if httpResponse.statusCode == 200 {
                     let decoder = JSONDecoder()
                     let result = try decoder.decode(AccountLoginData.Account.self, from: data)
-                    self.accountData?.account = result
                     self.requestState = .success
+                    self.accountData?.account = result
                 } else {
                     let result = try JSONDecoder().decode(ErrorData.self, from: data)
                     self.errorData = result
@@ -173,8 +171,8 @@ class AppViewModel: ObservableObject {
                 if httpResponse.statusCode == 200 {
                     let decoder = JSONDecoder()
                     let results = try decoder.decode([ApplicationData].self, from: data)
-                    self.applications = results
                     self.requestState = .success
+                    self.applications = results
                 } else {
                     let result = try JSONDecoder().decode(ErrorData.self, from: data)
                     self.errorData = result
@@ -254,10 +252,10 @@ class AppViewModel: ObservableObject {
             
             if let httpResponse = response as? HTTPURLResponse {
                 if httpResponse.statusCode == 204 {
+                    self.requestState = .success
                     if let index = self.applications.firstIndex(where: { $0.id == applicationId }) {
                         self.applications.remove(at: index)
                     }
-                    self.requestState = .success
                 } else {
                     let result = try JSONDecoder().decode(ErrorData.self, from: data)
                     self.errorData = result
@@ -295,8 +293,8 @@ class AppViewModel: ObservableObject {
                 if let httpResponse = response as? HTTPURLResponse {
                     if httpResponse.statusCode == 201 {
                         let result = try JSONDecoder().decode(ApplicationData.self, from: data)
-                        self.applications.append(result)
                         self.requestState = .success
+                        self.applications.append(result)
                     } else {
                         let result = try JSONDecoder().decode(ErrorData.self, from: data)
                         self.errorData = result
@@ -337,8 +335,8 @@ class AppViewModel: ObservableObject {
                 if httpResponse.statusCode == 200 {
                     let decoder = JSONDecoder()
                     let result = try decoder.decode(ApplicationData.self, from: data)
-                    self.applicationData = result
                     self.requestState = .success
+                    self.applicationData = result
                 } else {
                     let result = try JSONDecoder().decode(ErrorData.self, from: data)
                     self.errorData = result
@@ -377,8 +375,8 @@ class AppViewModel: ObservableObject {
                 if httpResponse.statusCode == 200 {
                     let decoder = JSONDecoder()
                     let results = try decoder.decode([ChatMessageData].self, from: data)
-                    self.generalChatMsgs = results
                     self.requestState = .success
+                    self.generalChatMsgs = results
                 } else {
                     let result = try JSONDecoder().decode(ErrorData.self, from: data)
                     self.errorData = result
@@ -419,8 +417,8 @@ class AppViewModel: ObservableObject {
                 if let httpResponse = response as? HTTPURLResponse {
                     if httpResponse.statusCode == 201 {
                         let result = try JSONDecoder().decode(ChatMessageData.self, from: data)
-                        self.generalChatMsgs.append(result)
                         self.requestState = .success
+                        self.generalChatMsgs.append(result)
                     } else {
                         let result = try JSONDecoder().decode(ErrorData.self, from: data)
                         self.errorData = result
@@ -456,10 +454,10 @@ class AppViewModel: ObservableObject {
             
             if let httpResponse = response as? HTTPURLResponse {
                 if httpResponse.statusCode == 204 {
+                    self.requestState = .success
                     if let index = generalChatMsgs.firstIndex(where: { $0.id == id }) {
                         generalChatMsgs.remove(at: index)
                     }
-                    self.requestState = .success
                 } else {
                     let result = try JSONDecoder().decode(ErrorData.self, from: data)
                     self.errorData = result
@@ -498,8 +496,8 @@ class AppViewModel: ObservableObject {
                 if httpResponse.statusCode == 200 {
                     let decoder = JSONDecoder()
                     let results = try decoder.decode([LogData].self, from: data)
-                    self.individualAccountLogs = results
                     self.requestState = .success
+                    self.individualAccountLogs = results
                 } else {
                     let result = try JSONDecoder().decode(ErrorData.self, from: data)
                     self.errorData = result
@@ -530,10 +528,10 @@ class AppViewModel: ObservableObject {
             
             if let httpResponse = response as? HTTPURLResponse {
                 if httpResponse.statusCode == 204 {
+                    self.requestState = .success
                     if let index = individualAccountLogs.firstIndex(where: { $0.id == id }) {
                         individualAccountLogs.remove(at: index)
                     }
-                    self.requestState = .success
                 } else {
                     let result = try JSONDecoder().decode(ErrorData.self, from: data)
                     self.errorData = result
@@ -572,8 +570,8 @@ class AppViewModel: ObservableObject {
                 if httpResponse.statusCode == 200 {
                     let decoder = JSONDecoder()
                     let results = try decoder.decode([UserData].self, from: data)
-                    self.users = results
                     self.requestState = .success
+                    self.users = results
                 } else {
                     let result = try JSONDecoder().decode(ErrorData.self, from: data)
                     self.errorData = result
@@ -612,8 +610,8 @@ class AppViewModel: ObservableObject {
                 if let httpResponse = response as? HTTPURLResponse {
                     if httpResponse.statusCode == 201 {
                         let result = try JSONDecoder().decode(UserData.self, from: data)
-                        self.users.append(result)
                         self.requestState = .success
+                        self.users.append(result)
                     } else {
                         let result = try JSONDecoder().decode(ErrorData.self, from: data)
                         self.errorData = result
@@ -695,10 +693,10 @@ class AppViewModel: ObservableObject {
             
             if let httpResponse = response as? HTTPURLResponse {
                 if httpResponse.statusCode == 204 {
+                    self.requestState = .success
                     if let index = self.users.firstIndex(where: { $0.id == userId }) {
                         self.users.remove(at: index)
                     }
-                    self.requestState = .success
                 } else {
                     let result = try JSONDecoder().decode(ErrorData.self, from: data)
                     self.errorData = result
@@ -738,8 +736,8 @@ class AppViewModel: ObservableObject {
                 if httpResponse.statusCode == 200 {
                     let decoder = JSONDecoder()
                     let results = try decoder.decode([UserSubData].self, from: data)
-                    self.userSubs = results
                     self.requestState = .success
+                    self.userSubs = results
                 } else {
                     let result = try JSONDecoder().decode(ErrorData.self, from: data)
                     self.errorData = result
@@ -778,8 +776,8 @@ class AppViewModel: ObservableObject {
                 if httpResponse.statusCode == 200 {
                     let decoder = JSONDecoder()
                     let results = try decoder.decode([LicenseData].self, from: data)
-                    self.licenses = results
                     self.requestState = .success
+                    self.licenses = results
                 } else {
                     let result = try JSONDecoder().decode(ErrorData.self, from: data)
                     self.errorData = result
@@ -817,8 +815,8 @@ class AppViewModel: ObservableObject {
                 if let httpResponse = response as? HTTPURLResponse {
                     if httpResponse.statusCode == 201 {
                         let result = try JSONDecoder().decode(LicenseData.self, from: data)
-                        self.licenses.append(result)
                         self.requestState = .success
+                        self.licenses.append(result)
                     } else {
                         let result = try JSONDecoder().decode(ErrorData.self, from: data)
                         self.errorData = result
@@ -900,10 +898,10 @@ class AppViewModel: ObservableObject {
             
             if let httpResponse = response as? HTTPURLResponse {
                 if httpResponse.statusCode == 204 {
+                    self.requestState = .success
                     if let index = self.licenses.firstIndex(where: { $0.id == licenseId }) {
                         self.licenses.remove(at: index)
                     }
-                    self.requestState = .success
                 } else {
                     let result = try JSONDecoder().decode(ErrorData.self, from: data)
                     self.errorData = result

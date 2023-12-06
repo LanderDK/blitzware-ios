@@ -114,43 +114,41 @@ struct AccountDetailsView: View {
             if viewModel.requestState == .pending || viewModel.requestState == .sent {
                 ProgressView()
             }
-            else {
-                HStack {
-                    ProfilePictureView()
-                    VStack {
-                        Text("Change photo")
+            HStack {
+                ProfilePictureView()
+                VStack {
+                    Text("Change photo")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 50)
+                        .background(LinearGradient(gradient: Gradient(colors: [Color(#colorLiteral(red: 0.262745098, green: 0.0862745098, blue: 0.8588235294, alpha: 1)), Color(#colorLiteral(red: 0.5647058824, green: 0.462745098, blue: 0.9058823529, alpha: 1))]), startPoint: .top, endPoint: .bottom))
+                        .cornerRadius(16)
+                        .foregroundColor(.white)
+                        .onTapGesture {
+                            showSheet = true
+                        }
+                    Button(action: {
+                        uploadImage()
+                    }) {
+                        Text("Upload")
                             .font(.headline)
                             .frame(maxWidth: .infinity)
                             .frame(height: 50)
-                            .background(LinearGradient(gradient: Gradient(colors: [Color(#colorLiteral(red: 0.262745098, green: 0.0862745098, blue: 0.8588235294, alpha: 1)), Color(#colorLiteral(red: 0.5647058824, green: 0.462745098, blue: 0.9058823529, alpha: 1))]), startPoint: .top, endPoint: .bottom))
-                            .cornerRadius(16)
+                            .background(!imageSelected ? LinearGradient(gradient: Gradient(colors: [Color(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)), Color(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))]), startPoint: .top, endPoint: .bottom) : LinearGradient(gradient: Gradient(colors: [Color(#colorLiteral(red: 0.262745098, green: 0.0862745098, blue: 0.8588235294, alpha: 1)), Color(#colorLiteral(red: 0.5647058824, green: 0.462745098, blue: 0.9058823529, alpha: 1))]), startPoint: .top, endPoint: .bottom))
                             .foregroundColor(.white)
-                            .onTapGesture {
-                                showSheet = true
-                            }
-                        Button(action: {
-                            uploadImage()
-                        }) {
-                            Text("Upload")
-                                .font(.headline)
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 50)
-                                .background(!imageSelected ? LinearGradient(gradient: Gradient(colors: [Color(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)), Color(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))]), startPoint: .top, endPoint: .bottom) : LinearGradient(gradient: Gradient(colors: [Color(#colorLiteral(red: 0.262745098, green: 0.0862745098, blue: 0.8588235294, alpha: 1)), Color(#colorLiteral(red: 0.5647058824, green: 0.462745098, blue: 0.9058823529, alpha: 1))]), startPoint: .top, endPoint: .bottom))
-                                .foregroundColor(.white)
-                        }
-                        .cornerRadius(16)
-                        .disabled(!imageSelected)
                     }
+                    .cornerRadius(16)
+                    .disabled(!imageSelected)
                 }
-                .buttonStyle(.borderless)
-                VStack(alignment: .leading, spacing: 20) {
-                    AccountInfoItemView(icon: "key.fill", text: viewModel.accountData!.account.id)
-                    AccountInfoItemView(icon: "person.fill", text: viewModel.accountData!.account.username)
-                    AccountInfoItemView(icon: "envelope.fill", text: "\(viewModel.accountData!.account.email)")
-                    AccountInfoItemView(icon: rolesIcon(), text: viewModel.accountData!.account.roles[0])
-                }
-                .padding()
             }
+            .buttonStyle(.borderless)
+            VStack(alignment: .leading, spacing: 20) {
+                AccountInfoItemView(icon: "key.fill", text: viewModel.accountData!.account.id)
+                AccountInfoItemView(icon: "person.fill", text: viewModel.accountData!.account.username)
+                AccountInfoItemView(icon: "envelope.fill", text: "\(viewModel.accountData!.account.email)")
+                AccountInfoItemView(icon: rolesIcon(), text: viewModel.accountData!.account.roles[0])
+            }
+            .padding()
         }
         .padding()
         .navigationTitle("Account Details")

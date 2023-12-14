@@ -55,13 +55,16 @@ struct ChatList: View {
             if viewModel.requestState == .pending || viewModel.requestState == .sent {
                 ProgressView()
             }
-            ScrollView {
-                ForEach(viewModel.generalChatMsgs, id: \.id) { chatMsg in
-                    ChatMsg(username: chatMsg.username, message: chatMsg.message, date: chatMsg.date, onDelete: {
-                        deleteChatMessage(chatMsg.id)
-                    })
+            ReverseScrollView {
+                VStack(spacing: 8) {
+                    ForEach(viewModel.generalChatMsgs, id: \.id) { chatMsg in
+                        ChatMsg(username: chatMsg.username, message: chatMsg.message, date: chatMsg.date, onDelete: {
+                            deleteChatMessage(chatMsg.id)
+                        })
+                    }
                 }
             }
+            //.navigationBarTitle(Text("Conversation"))
             HStack {
                 TextField("Type here, \(viewModel.accountData!.account.username)...", text: $msg)
                     .padding(10)
@@ -116,7 +119,7 @@ struct CommunityView: View {
     var body: some View {
         NavigationView {
             ChatList()
-                .navigationBarTitle("Community")
+                .navigationBarTitle("Community General Chat")
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }

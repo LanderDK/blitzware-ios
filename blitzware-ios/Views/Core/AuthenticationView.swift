@@ -11,6 +11,8 @@ struct LoginView: View {
     @EnvironmentObject var viewModel: AppViewModel
     @State private var username = ""
     @State private var password = ""
+    @State private var twoFactorCode = ""
+    @State private var otpCode = ""
     
     var body: some View {
         VStack {
@@ -57,6 +59,33 @@ struct LoginView: View {
                     }
                 }
             }
-        }.padding()
+        }
+        .padding()
+        .alert("Two-Factor Authentication", isPresented: $viewModel.twoFactorRequired, actions: {
+            TextField("000000", text: $twoFactorCode)
+            Button("Login", action: verify2FA)
+            Button("Cancel", role: .cancel, action: {})
+        }, message: {
+            Text("Please enter the 6-digit code:")
+        })
+        .alert("Action required: check email", isPresented: $viewModel.otpRequired, actions: {
+            TextField("0000", text: $otpCode)
+            Button("Login", action: verifyOTP)
+            Button("Cancel", role: .cancel, action: {})
+        }, message: {
+            Text("Please enter the 4-digit code:")
+        })
+    }
+    
+    func verify2FA() {
+        Task {
+            await viewModel.verifyLogin2FA(username: username, twoFactorCode: twoFactorCode)
+        }
+    }
+    
+    func verifyOTP() {
+        Task {
+            await viewModel.verifyLoginOTP(username: username, otp: otpCode)
+        }
     }
 }

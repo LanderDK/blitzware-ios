@@ -14,7 +14,8 @@ class AppViewModel: ObservableObject {
     @Published var requestState: RequestState = .none
     @Published var errorData: ErrorData?
     @Published var isAuthed: Bool = false
-    private var baseUrl: String = "http://localhost:9000/api"
+    private var baseUrl: String = "https://api.blitzware.xyz/api"
+    private let x_mobile_app = "ios-7ed45b96-fc2b-4d8e-a276-43d63f009cf4"
     
     // MARK: - Account request functions
     
@@ -33,6 +34,7 @@ class AppViewModel: ObservableObject {
             request.httpMethod = "POST"
             request.httpBody = finalData
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue(x_mobile_app, forHTTPHeaderField: "X-Mobile-App")
             
             do {
                 let (data, response) = try await URLSession.shared.data(for: request)
@@ -74,6 +76,7 @@ class AppViewModel: ObservableObject {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+        request.setValue(x_mobile_app, forHTTPHeaderField: "X-Mobile-App")
         
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
@@ -119,6 +122,7 @@ class AppViewModel: ObservableObject {
             request.httpBody = finalData
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+            request.setValue(x_mobile_app, forHTTPHeaderField: "X-Mobile-App")
             
             do {
                 let (data, response) = try await URLSession.shared.data(for: request)
@@ -160,6 +164,7 @@ class AppViewModel: ObservableObject {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+        request.setValue(x_mobile_app, forHTTPHeaderField: "X-Mobile-App")
         
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
@@ -208,6 +213,7 @@ class AppViewModel: ObservableObject {
             request.httpBody = finalData
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+            request.setValue(x_mobile_app, forHTTPHeaderField: "X-Mobile-App")
             
             do {
                 let (data, response) = try await URLSession.shared.data(for: request)
@@ -247,6 +253,7 @@ class AppViewModel: ObservableObject {
         request.httpMethod = "DELETE"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+        request.setValue(x_mobile_app, forHTTPHeaderField: "X-Mobile-App")
         
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
@@ -287,6 +294,7 @@ class AppViewModel: ObservableObject {
             request.httpBody = finalData
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+            request.setValue(x_mobile_app, forHTTPHeaderField: "X-Mobile-App")
             
             do {
                 let (data, response) = try await URLSession.shared.data(for: request)
@@ -324,6 +332,7 @@ class AppViewModel: ObservableObject {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+        request.setValue(x_mobile_app, forHTTPHeaderField: "X-Mobile-App")
         
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
@@ -364,6 +373,7 @@ class AppViewModel: ObservableObject {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+        request.setValue(x_mobile_app, forHTTPHeaderField: "X-Mobile-App")
         
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
@@ -411,6 +421,7 @@ class AppViewModel: ObservableObject {
             request.httpBody = finalData
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+            request.setValue(x_mobile_app, forHTTPHeaderField: "X-Mobile-App")
             
             do {
                 let (data, response) = try await URLSession.shared.data(for: request)
@@ -449,6 +460,7 @@ class AppViewModel: ObservableObject {
         request.httpMethod = "DELETE"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+        request.setValue(x_mobile_app, forHTTPHeaderField: "X-Mobile-App")
         
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
@@ -485,6 +497,7 @@ class AppViewModel: ObservableObject {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+        request.setValue(x_mobile_app, forHTTPHeaderField: "X-Mobile-App")
         
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
@@ -523,6 +536,7 @@ class AppViewModel: ObservableObject {
         request.httpMethod = "DELETE"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+        request.setValue(x_mobile_app, forHTTPHeaderField: "X-Mobile-App")
         
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
@@ -559,6 +573,7 @@ class AppViewModel: ObservableObject {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+        request.setValue(x_mobile_app, forHTTPHeaderField: "X-Mobile-App")
         
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
@@ -608,6 +623,7 @@ class AppViewModel: ObservableObject {
             request.httpBody = finalData
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+            request.setValue(x_mobile_app, forHTTPHeaderField: "X-Mobile-App")
             
             do {
                 let (data, response) = try await URLSession.shared.data(for: request)
@@ -657,6 +673,7 @@ class AppViewModel: ObservableObject {
             request.httpBody = finalData
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+            request.setValue(x_mobile_app, forHTTPHeaderField: "X-Mobile-App")
             
             do {
                 let (data, response) = try await URLSession.shared.data(for: request)
@@ -696,6 +713,7 @@ class AppViewModel: ObservableObject {
         request.httpMethod = "DELETE"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+        request.setValue(x_mobile_app, forHTTPHeaderField: "X-Mobile-App")
         
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
@@ -733,6 +751,7 @@ class AppViewModel: ObservableObject {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+        request.setValue(x_mobile_app, forHTTPHeaderField: "X-Mobile-App")
         
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
@@ -777,6 +796,7 @@ class AppViewModel: ObservableObject {
             request.httpBody = finalData
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+            request.setValue(x_mobile_app, forHTTPHeaderField: "X-Mobile-App")
             
             do {
                 let (data, response) = try await URLSession.shared.data(for: request)
@@ -821,6 +841,7 @@ class AppViewModel: ObservableObject {
             request.httpBody = finalData
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+            request.setValue(x_mobile_app, forHTTPHeaderField: "X-Mobile-App")
             
             do {
                 let (data, response) = try await URLSession.shared.data(for: request)
@@ -860,6 +881,7 @@ class AppViewModel: ObservableObject {
         request.httpMethod = "DELETE"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+        request.setValue(x_mobile_app, forHTTPHeaderField: "X-Mobile-App")
         
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
@@ -896,6 +918,7 @@ class AppViewModel: ObservableObject {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+        request.setValue(x_mobile_app, forHTTPHeaderField: "X-Mobile-App")
         
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
@@ -940,6 +963,7 @@ class AppViewModel: ObservableObject {
             request.httpBody = finalData
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+            request.setValue(x_mobile_app, forHTTPHeaderField: "X-Mobile-App")
             
             do {
                 let (data, response) = try await URLSession.shared.data(for: request)
@@ -987,6 +1011,7 @@ class AppViewModel: ObservableObject {
             request.httpBody = finalData
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+            request.setValue(x_mobile_app, forHTTPHeaderField: "X-Mobile-App")
             
             do {
                 let (data, response) = try await URLSession.shared.data(for: request)
@@ -1026,6 +1051,7 @@ class AppViewModel: ObservableObject {
         request.httpMethod = "DELETE"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+        request.setValue(x_mobile_app, forHTTPHeaderField: "X-Mobile-App")
         
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
@@ -1062,6 +1088,7 @@ class AppViewModel: ObservableObject {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+        request.setValue(x_mobile_app, forHTTPHeaderField: "X-Mobile-App")
         
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
@@ -1106,6 +1133,7 @@ class AppViewModel: ObservableObject {
             request.httpBody = finalData
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+            request.setValue(x_mobile_app, forHTTPHeaderField: "X-Mobile-App")
             
             do {
                 let (data, response) = try await URLSession.shared.data(for: request)
@@ -1144,6 +1172,7 @@ class AppViewModel: ObservableObject {
         request.httpMethod = "DELETE"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+        request.setValue(x_mobile_app, forHTTPHeaderField: "X-Mobile-App")
         
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
@@ -1180,6 +1209,7 @@ class AppViewModel: ObservableObject {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+        request.setValue(x_mobile_app, forHTTPHeaderField: "X-Mobile-App")
         
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
@@ -1218,6 +1248,7 @@ class AppViewModel: ObservableObject {
         request.httpMethod = "DELETE"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+        request.setValue(x_mobile_app, forHTTPHeaderField: "X-Mobile-App")
         
         do {
             let (data, response) = try await URLSession.shared.data(for: request)

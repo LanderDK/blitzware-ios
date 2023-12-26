@@ -8,17 +8,18 @@
 import SwiftUI
 
 struct LogView: View {
-    var date: Date
     var action: String
     var message: String
+    var date: String
     var onDelete: () -> Void
+    @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
                 Text("\(action): \(message)")
                     .font(.headline)
-                Text(formattedDate(date))
+                Text(convertDateString(date) ?? "Error date")
                     .font(.subheadline)
                     .foregroundColor(.gray)
             }
@@ -30,17 +31,12 @@ struct LogView: View {
             .buttonStyle(BorderlessButtonStyle())
         }
         .padding()
-        .background(Color.white)
+        .background(colorScheme == .dark ? Color.black : Color.white)
+        .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
         .cornerRadius(10)
-        .shadow(radius: 5)
+        .shadow(color: Color.gray, radius: 5)
         .padding(.horizontal)
         .padding(.bottom, 10)
-    }
-    
-    private func formattedDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd MMM yyyy HH:mm"
-        return formatter.string(from: date)
     }
 }
 
@@ -58,7 +54,7 @@ struct LogList: View {
             }
             ScrollView {
                 ForEach(viewModel.individualAccountLogs, id: \.id) { log in
-                    LogView(date: log.date, action: log.action, message: log.message, onDelete: {
+                    LogView(action: log.action, message: log.message, date: log.dateString, onDelete: {
                         deleteLog(log.id)
                     })
                 }

@@ -8,27 +8,32 @@
 import SwiftUI
 
 struct ChatMsg: View {
+    @EnvironmentObject var viewModel: AppViewModel
+    @Environment(\.colorScheme) var colorScheme
     var username: String
     var message: String
-    var date: Date
+    var date: String
     var onDelete: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: username == viewModel.accountData?.account.username ? .trailing : .leading, spacing: 8) {
             HStack {
-                Text(username)
-                    .font(.subheadline)
-                    .foregroundColor(.blue)
+                if username != viewModel.accountData?.account.username {
+                    Text(username)
+                        .font(.subheadline)
+                        .foregroundColor(username == viewModel.accountData?.account.username ? Color.blue : colorScheme == .dark ? Color.white : Color.black)
+                }
                 Spacer()
-                Text("\(formattedDate(date))")
+                Text(convertDateString(date) ?? "Error date")
                     .font(.caption)
                     .foregroundColor(.gray)
             }
             Text(message)
                 .padding(10)
-                .background(Color.blue)
+                .background(username == viewModel.accountData?.account.username ? Color.blue : Color.gray)
                 .foregroundColor(.white)
                 .cornerRadius(10)
+                .fixedSize(horizontal: false, vertical: true)
         }
         .contextMenu {
             Button(action: onDelete) {
@@ -58,7 +63,7 @@ struct ChatList: View {
             ReverseScrollView {
                 VStack(spacing: 8) {
                     ForEach(viewModel.generalChatMsgs, id: \.id) { chatMsg in
-                        ChatMsg(username: chatMsg.username, message: chatMsg.message, date: chatMsg.date, onDelete: {
+                        ChatMsg(username: chatMsg.username, message: chatMsg.message, date: chatMsg.dateString, onDelete: {
                             deleteChatMessage(chatMsg.id)
                         })
                     }

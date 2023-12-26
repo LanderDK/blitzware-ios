@@ -57,6 +57,7 @@ struct BottomNavBarApp: View {
 struct ApplicationDetailView: View {
     @EnvironmentObject var viewModel: AppViewModel
     var application: ApplicationData
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         VStack {
@@ -87,8 +88,10 @@ struct ApplicationDetailView: View {
                         .padding(.trailing, 10)
                         .padding(.bottom, 10)
                 }
-                .background(Constants.lightGray)
-                .cornerRadius(15)
+                .background(colorScheme == .dark ? Color.black : Color.white)
+                .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
+                .cornerRadius(10)
+                .shadow(color: Color.gray, radius: 5)
                 HStack {
                     Text("Secret:")
                         .foregroundColor(.primary)
@@ -104,8 +107,10 @@ struct ApplicationDetailView: View {
                         .padding(.trailing, 10)
                         .padding(.bottom, 10)
                 }
-                .background(Constants.lightGray)
-                .cornerRadius(15)
+                .background(colorScheme == .dark ? Color.black : Color.white)
+                .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
+                .cornerRadius(10)
+                .shadow(color: Color.gray, radius: 5)
                 HStack {
                     Text("Version:")
                         .foregroundColor(.primary)
@@ -121,8 +126,10 @@ struct ApplicationDetailView: View {
                         .padding(.trailing, 10)
                         .padding(.bottom, 10)
                 }
-                .background(Constants.lightGray)
-                .cornerRadius(15)
+                .background(colorScheme == .dark ? Color.black : Color.white)
+                .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
+                .cornerRadius(10)
+                .shadow(color: Color.gray, radius: 5)
                 HStack {
                     Text("Status:")
                         .foregroundColor(.primary)
@@ -147,8 +154,10 @@ struct ApplicationDetailView: View {
                             .padding(.bottom, 10)
                     }
                 }
-                .background(Constants.lightGray)
-                .cornerRadius(15)
+                .background(colorScheme == .dark ? Color.black : Color.white)
+                .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
+                .cornerRadius(10)
+                .shadow(color: Color.gray, radius: 5)
                 HStack {
                     Text("Developer Mode:")
                         .foregroundColor(.primary)
@@ -173,8 +182,10 @@ struct ApplicationDetailView: View {
                             .padding(.bottom, 10)
                     }
                 }
-                .background(Constants.lightGray)
-                .cornerRadius(15)
+                .background(colorScheme == .dark ? Color.black : Color.white)
+                .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
+                .cornerRadius(10)
+                .shadow(color: Color.gray, radius: 5)
                 HStack {
                     Text("2FA:")
                         .foregroundColor(.primary)
@@ -199,8 +210,10 @@ struct ApplicationDetailView: View {
                             .padding(.bottom, 10)
                     }
                 }
-                .background(Constants.lightGray)
-                .cornerRadius(15)
+                .background(colorScheme == .dark ? Color.black : Color.white)
+                .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
+                .cornerRadius(10)
+                .shadow(color: Color.gray, radius: 5)
                 HStack {
                     Text("HWID Lock:")
                         .foregroundColor(.primary)
@@ -225,8 +238,10 @@ struct ApplicationDetailView: View {
                             .padding(.bottom, 10)
                     }
                 }
-                .background(Constants.lightGray)
-                .cornerRadius(15)
+                .background(colorScheme == .dark ? Color.black : Color.white)
+                .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
+                .cornerRadius(10)
+                .shadow(color: Color.gray, radius: 5)
                 HStack {
                     Text("Free Mode:")
                         .foregroundColor(.primary)
@@ -251,8 +266,10 @@ struct ApplicationDetailView: View {
                             .padding(.bottom, 10)
                     }
                 }
-                .background(Constants.lightGray)
-                .cornerRadius(15)
+                .background(colorScheme == .dark ? Color.black : Color.white)
+                .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
+                .cornerRadius(10)
+                .shadow(color: Color.gray, radius: 5)
                 HStack {
                     Text("Integrity Check:")
                         .foregroundColor(.primary)
@@ -277,8 +294,10 @@ struct ApplicationDetailView: View {
                             .padding(.bottom, 10)
                     }
                 }
-                .background(Constants.lightGray)
-                .cornerRadius(15)
+                .background(colorScheme == .dark ? Color.black : Color.white)
+                .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
+                .cornerRadius(10)
+                .shadow(color: Color.gray, radius: 5)
             }
         }
         .onAppear(perform: {

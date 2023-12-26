@@ -11,6 +11,7 @@ struct ResourceView: View {
     var name: String
     var link: String
     var iconName: String
+    @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
         HStack {
@@ -29,9 +30,10 @@ struct ResourceView: View {
             })
         }
         .padding()
-        .background(Color.white)
+        .background(colorScheme == .dark ? Color.black : Color.white)
+        .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
         .cornerRadius(10)
-        .shadow(radius: 5)
+        .shadow(color: Color.gray, radius: 5)
         .padding(.horizontal)
         .padding(.bottom, 10)
     }

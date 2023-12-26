@@ -154,7 +154,7 @@ struct FileRowView: View {
                 Text("Created On: ")
                     .font(.subheadline)
                     .fontWeight(.bold)
-                Text(file.createdOnString)
+                Text(convertDateString(file.createdOnString) ?? "Error date")
                     .font(.subheadline)
             }
         }

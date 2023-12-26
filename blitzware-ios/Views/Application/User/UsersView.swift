@@ -293,7 +293,7 @@ struct UserRowView: View {
                 Text("Expiry: ")
                     .font(.subheadline)
                     .fontWeight(.bold)
-                Text(user.expiryDateString)
+                Text(convertDateString(user.expiryDateString) ?? "Error date")
                     .font(.subheadline)
             }
             HStack {
@@ -311,7 +311,7 @@ struct UserRowView: View {
                 Text("Last Login: ")
                     .font(.subheadline)
                     .fontWeight(.bold)
-                Text(user.lastLoginString)
+                Text(convertDateString(user.lastLoginString) ?? "Date error")
                     .font(.subheadline)
             }
             HStack {

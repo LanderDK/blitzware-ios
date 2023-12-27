@@ -112,17 +112,14 @@ class AppViewModel: ObservableObject {
         }
     }
     
-    // TODO: - DOES NOT WORK
     func updateAccountProfilePictureById(id: String, profilePicture: [String: Any]) async {
         self.errorData = nil
         self.requestState = .pending
         
         guard let url = URL(string: baseUrl + "/accounts/profilePicture/\(id)") else { return }
         
-        let body: [String: Any] = ["profilePicture":profilePicture]
-        
         do {
-            let finalData = try JSONSerialization.data(withJSONObject: body)
+            let finalData = try JSONSerialization.data(withJSONObject: profilePicture)
             
             var request = URLRequest(url: url)
             request.httpMethod = "PUT"
@@ -135,11 +132,23 @@ class AppViewModel: ObservableObject {
                 let (data, response) = try await URLSession.shared.data(for: request)
                 self.requestState = .sent
                 
-                let responseString = String(data: data, encoding: .utf8)
-                print("Raw Response Data:\n\(responseString ?? "Empty")")
+//                let responseString = String(data: data, encoding: .utf8)
+//                print("Raw Response Data:\n\(responseString ?? "Empty")")
                 
                 if let httpResponse = response as? HTTPURLResponse {
                     if httpResponse.statusCode == 204 {
+                        if let profilePicture = profilePicture["profilePicture"] as? [String: Any],
+                            let name = profilePicture["name"] as? String,
+                            let type = profilePicture["type"] as? String,
+                            let size = profilePicture["size"] as? Int,
+                            let dataURL = profilePicture["dataURL"] as? String {
+                            let jsonString = """
+                                {"dataURL":"\(dataURL)","name":"\(name)","size":\(size),"type":"\(type)"}
+                                """
+                            self.accountData?.account.profilePicture = jsonString
+                        } else {
+                            print("Invalid format for profilePicture in body dictionary")
+                        }
                         self.requestState = .success
                     } else {
                         let result = try JSONDecoder().decode(ErrorData.self, from: data)

@@ -37,7 +37,7 @@ struct ProfilePictureView: View {
         } else {
             profileImage = Image(.avatar)
             if let profilePictureData = viewModel.accountData?.account.profilePicture {
-                if let data = Data(base64Encoded: profilePictureData) {
+                if Data(base64Encoded: profilePictureData) != nil {
                 } else {
                     print("Base64 Decoding Failed")
                 }
@@ -117,28 +117,12 @@ struct AccountDetailsView: View {
             HStack {
                 ProfilePictureView()
                 VStack {
-                    Text("Change photo")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 50)
-                        .background(LinearGradient(gradient: Gradient(colors: [Color(#colorLiteral(red: 0.262745098, green: 0.0862745098, blue: 0.8588235294, alpha: 1)), Color(#colorLiteral(red: 0.5647058824, green: 0.462745098, blue: 0.9058823529, alpha: 1))]), startPoint: .top, endPoint: .bottom))
-                        .cornerRadius(16)
-                        .foregroundColor(.white)
-                        .onTapGesture {
-                            showSheet = true
-                        }
-                    Button(action: {
-                        uploadImage()
-                    }) {
-                        Text("Upload")
-                            .font(.headline)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 50)
-                            .background(!imageSelected ? LinearGradient(gradient: Gradient(colors: [Color(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)), Color(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))]), startPoint: .top, endPoint: .bottom) : LinearGradient(gradient: Gradient(colors: [Color(#colorLiteral(red: 0.262745098, green: 0.0862745098, blue: 0.8588235294, alpha: 1)), Color(#colorLiteral(red: 0.5647058824, green: 0.462745098, blue: 0.9058823529, alpha: 1))]), startPoint: .top, endPoint: .bottom))
-                            .foregroundColor(.white)
+                    CustomButton(title: "Change photo", isDisabled: false) {
+                        showSheet = true
                     }
-                    .cornerRadius(16)
-                    .disabled(!imageSelected)
+                    CustomButton(title: "Upload", isDisabled: !imageSelected) {
+                        uploadImage()
+                    }
                 }
             }
             .buttonStyle(.borderless)
@@ -180,18 +164,20 @@ struct AccountDetailsView: View {
         let base64String = imageData.base64EncodedString()
 
         let profilePicture: [String: Any] = [
-            "name": "avatar.png",
-            "type": imageType,
-            "size": imageData.count,
-            "dataURL": "data:image/png;base64,\(base64String)"
+            "profilePicture": [
+                "name": "avatar.png",
+                "type": imageType,
+                "size": imageData.count,
+                "dataURL": "data:\(imageType);base64,\(base64String)"
+            ]
         ]
-
+        
         Task {
             await viewModel.updateAccountProfilePictureById(
                 id: viewModel.accountData!.account.id,
                 profilePicture: profilePicture
             )
-
+            imageSelected = false
             showAlert = true
         }
     }

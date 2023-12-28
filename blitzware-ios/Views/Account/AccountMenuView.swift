@@ -46,7 +46,9 @@ struct AccountMenuView: View {
     }
     
     func logout() {
-        print("Logging out...")
+        Task {
+            await viewModel.logout()
+        }
         viewModel.errorData = nil
         viewModel.requestState = .none
         viewModel.isAuthed = false

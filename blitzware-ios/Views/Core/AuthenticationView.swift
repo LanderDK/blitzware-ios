@@ -28,6 +28,9 @@ struct LoginView: View {
                 Text("Create an account")
                     .font(.subheadline)
                     .foregroundColor(Constants.mainColorLight)
+                    .onTapGesture {
+                        viewModel.registerView = true
+                    }
             }.padding(.bottom, Constants.verticalPadding)
             
             if viewModel.requestState == .error {
@@ -87,5 +90,70 @@ struct LoginView: View {
         Task {
             await viewModel.verifyLoginOTP(username: username, otp: otpCode)
         }
+    }
+}
+
+struct RegisterView: View {
+    @EnvironmentObject var viewModel: AppViewModel
+    @State private var username = ""
+    @State private var email = ""
+    @State private var password = ""
+    @State private var confirmPassword = ""
+    
+    var body: some View {
+        VStack {
+            HStack {
+                Image(systemName: "person.badge.shield.checkmark.fill")
+                    .font(.largeTitle)
+                Text("Create an account")
+                    .font(.largeTitle)
+            }
+            HStack {
+                Text("Already have an account?")
+                    .font(.subheadline)
+                Text("Sign in here")
+                    .font(.subheadline)
+                    .foregroundColor(Constants.mainColorLight)
+                    .onTapGesture {
+                        viewModel.registerView = false
+                    }
+            }.padding(.bottom, Constants.verticalPadding)
+            
+            if viewModel.requestState == .error {
+                Text(viewModel.errorData?.message ?? "Unknown error")
+                    .foregroundColor(.red)
+                    .padding(.bottom, Constants.verticalPadding)
+            }
+            else if viewModel.requestState == .success {
+                Text("Successfully registered!")
+                    .foregroundColor(.green)
+                    .padding(.bottom, Constants.verticalPadding)
+            }
+            
+            VStack {
+                TextField("Username", text: $username)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                TextField("Email", text: $email)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                SecureField("Password", text: $password)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                SecureField("Confirm password", text: $confirmPassword)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                Text(password != confirmPassword ? "Passwords do not match" : "")
+                    .foregroundColor(.red)
+            }
+
+            if viewModel.requestState == .pending || viewModel.requestState == .sent {
+                ProgressView()
+            }
+            else {
+                CustomButton(title: "Register", isDisabled: username.isEmpty || email.isEmpty || password.isEmpty || confirmPassword.isEmpty || password != confirmPassword) {
+                    Task {
+                        await viewModel.register(username: username, email: email, password: password)
+                    }
+                }
+            }
+        }
+        .padding()
     }
 }

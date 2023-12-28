@@ -13,6 +13,7 @@ class AppViewModel: ObservableObject {
     @Published var appLogs: [AppLogData] = []
     @Published var requestState: RequestState = .none
     @Published var errorData: ErrorData?
+    @Published var registerView: Bool = false
     @Published var isAuthed: Bool = false
     @Published var twoFactorRequired: Bool = false
     @Published var otpRequired: Bool = false
@@ -73,6 +74,85 @@ class AppViewModel: ObservableObject {
             self.errorData = ErrorData(code: "CATCH_ERROR", message: "Error serializing JSON: \(error.localizedDescription)")
         }
     }
+    
+    func register(username: String, email: String, password: String) async {
+        self.errorData = nil
+        self.requestState = .pending
+        
+        guard let url = URL(string: baseUrl + "/accounts/register") else { return }
+        
+        let body: [String: Any] = ["username": username, "email": email, "password": password, "recaptchaValue": "N/A"]
+        
+        do {
+            let finalData = try JSONSerialization.data(withJSONObject: body)
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.httpBody = finalData
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue(x_mobile_app, forHTTPHeaderField: "X-Mobile-App")
+            
+            do {
+                let (data, response) = try await URLSession.shared.data(for: request)
+                self.requestState = .sent
+//                let responseString = String(data: data, encoding: .utf8)
+//                print("Raw Response Data:\n\(responseString ?? "Empty")")
+                
+                if let httpResponse = response as? HTTPURLResponse {
+                    if httpResponse.statusCode == 201 {
+                        self.requestState = .success
+                    } else {
+                        let result = try JSONDecoder().decode(ErrorData.self, from: data)
+                        self.errorData = result
+                        self.requestState = .error
+                    }
+                }
+            } catch {
+                print("Error fetching data: \(error)")
+                self.requestState = .error
+                self.errorData = ErrorData(code: "FETCH_ERROR", message: "Error fetching data: \(error.localizedDescription)")
+            }
+        } catch {
+            print("Error serializing JSON: \(error.localizedDescription)")
+            self.requestState = .error
+            self.errorData = ErrorData(code: "CATCH_ERROR", message: "Error serializing JSON: \(error.localizedDescription)")
+        }
+    }
+    
+    func logout() async {
+        self.errorData = nil
+        self.requestState = .pending
+        
+        guard let url = URL(string: baseUrl + "/accounts/logout") else { return }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(self.accountData!.token)", forHTTPHeaderField: "Authorization")
+        request.setValue(x_mobile_app, forHTTPHeaderField: "X-Mobile-App")
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            self.requestState = .sent
+//                let responseString = String(data: data, encoding: .utf8)
+//                print("Raw Response Data:\n\(responseString ?? "Empty")")
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                if httpResponse.statusCode == 200 {
+                    self.requestState = .success
+                } else {
+                    let result = try JSONDecoder().decode(ErrorData.self, from: data)
+                    self.errorData = result
+                    self.requestState = .error
+                }
+            }
+        } catch {
+            print("Error fetching data: \(error)")
+            self.requestState = .error
+            self.errorData = ErrorData(code: "FETCH_ERROR", message: "Error fetching data: \(error.localizedDescription)")
+        }
+    }
+
     
     func getAccountById(id: String) async {
         self.errorData = nil

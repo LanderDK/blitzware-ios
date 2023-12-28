@@ -8,7 +8,11 @@ struct ContentView: View {
         if viewModel.isAuthed {
             BottomNavBar()
         } else {
-            LoginView()
+            if viewModel.registerView {
+                RegisterView()
+            } else {
+                LoginView()
+            }
         }
     }
 }

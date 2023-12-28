@@ -804,7 +804,7 @@ class AppViewModel: ObservableObject {
 //                print("Raw Response Data:\n\(responseString ?? "Empty")")
                 
                 if let httpResponse = response as? HTTPURLResponse {
-                    if httpResponse.statusCode == 204 {
+                    if httpResponse.statusCode == 204 || httpResponse.statusCode == 200 {
                         self.requestState = .success
                     } else {
                         let result = try JSONDecoder().decode(ErrorData.self, from: data)
@@ -972,7 +972,10 @@ class AppViewModel: ObservableObject {
 //                print("Raw Response Data:\n\(responseString ?? "Empty")")
                 
                 if let httpResponse = response as? HTTPURLResponse {
-                    if httpResponse.statusCode == 204 {
+                    if httpResponse.statusCode == 204 || httpResponse.statusCode == 200 {
+                        if let index = self.userSubs.firstIndex(where: { $0.id == userSub.id }) {
+                            self.userSubs[index] = userSub
+                        }
                         self.requestState = .success
                     } else {
                         let result = try JSONDecoder().decode(ErrorData.self, from: data)
@@ -1142,7 +1145,7 @@ class AppViewModel: ObservableObject {
 //                print("Raw Response Data:\n\(responseString ?? "Empty")")
                 
                 if let httpResponse = response as? HTTPURLResponse {
-                    if httpResponse.statusCode == 204 {
+                    if httpResponse.statusCode == 204 || httpResponse.statusCode == 200 {
                         self.requestState = .success
                     } else {
                         let result = try JSONDecoder().decode(ErrorData.self, from: data)

@@ -139,7 +139,7 @@ struct UsersList: View {
                 AddUserView(isPresented: $isShowingAddSheet)
             }
             .sheet(isPresented: $isShowingEditSheet) {
-                EditUserView(user: userToEdit, isPresented: $isShowingEditSheet)
+                EditUserView(isPresented: $isShowingEditSheet, user: $userToEdit)
             }
         }
     }
@@ -148,28 +148,8 @@ struct UsersList: View {
 struct EditUserView: View {
     @EnvironmentObject var viewModel: AppViewModel
     @Binding var isPresented: Bool
-    @State var user: UserDataMutate
-    @State var username: String
-    @State var email: String
-    @State var expiryDate: Date
-    @State var hwid: String
-    @State private var twoFactorAuth: Int
-    @State private var enabled: Int
-    @State private var subscription: Int
+    @Binding var user: UserDataMutate
     private let options = ["0", "1"]
-
-    init(user: UserDataMutate, isPresented: Binding<Bool>) {
-        print("User: \(user)")
-        self._user = State(initialValue: user)
-        self._username = State(initialValue: user.username)
-        self._email = State(initialValue: user.email)
-        self._expiryDate = State(initialValue: user.expiryDate)
-        self._hwid = State(initialValue: user.hwid)
-        self._twoFactorAuth = State(initialValue: user.twoFactorAuth)
-        self._enabled = State(initialValue: user.enabled)
-        self._subscription = State(initialValue: user.subscription ?? 0)
-        self._isPresented = isPresented
-    }
 
     var body: some View {
         VStack {
@@ -183,24 +163,23 @@ struct EditUserView: View {
                     .padding()
                 Spacer()
                 Button("Update") {
-                    let newUser = UserDataMutate(id: user.id, username: username, email: email, expiryDate: expiryDate, hwid: hwid, twoFactorAuth: twoFactorAuth, enabled: enabled, subscription: subscription)
                     Task {
-                        await viewModel.updateUserById(user: newUser)
+                        await viewModel.updateUserById(user: user)
                     }
                     isPresented = false
                 }
             }.padding()
             Form {
-                TextField("Username", text: $username)
-                TextField("Email", text: $email)
-                DatePicker("Expiry date", selection: $expiryDate, displayedComponents: [.date, .hourAndMinute])
+                TextField("Username", text: $user.username)
+                TextField("Email", text: $user.email)
+                DatePicker("Expiry date", selection: $user.expiryDate, displayedComponents: [.date, .hourAndMinute])
                     .datePickerStyle(DefaultDatePickerStyle())
-                TextField("Hardware-ID", text: $hwid)
+                TextField("Hardware-ID", text: $user.hwid)
 //                DropDownInputBool(label: "2FA", name: "twoFactorAuth", options: options, selectedOption: $twoFactorAuth)
 //                    .frame(width: 200)
 //                DropDownInputBool(label: "Enabled", name: "enabled", options: options, selectedOption: $enabled)
 //                    .frame(width: 200)
-                Picker("Subscription level", selection: $subscription) {
+                Picker("Subscription level", selection: $user.subscription) {
                     ForEach(viewModel.userSubs, id: \.self) { userSub in
                         Text("\(userSub.name) (\(userSub.level))").tag(userSub.id)
                     }

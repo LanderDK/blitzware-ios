@@ -124,7 +124,7 @@ struct LicensesList: View {
                 AddLicenseView(isPresented: $isShowingAddSheet)
             }
             .sheet(isPresented: $isShowingEditSheet) {
-                EditLicenseView(license: licenseToEdit, isPresented: $isShowingEditSheet)
+                EditLicenseView(isPresented: $isShowingEditSheet, license: $licenseToEdit)
             }
         }
     }
@@ -133,23 +133,8 @@ struct LicensesList: View {
 struct EditLicenseView: View {
     @EnvironmentObject var viewModel: AppViewModel
     @Binding var isPresented: Bool
-    @State private var license: LicenseDataMutate
-    @State private var llicnese: String
-    @State private var days: Int
-    @State private var used: Int
-    @State private var enabled: Int
-    @State private var subscription: Int
+    @Binding var license: LicenseDataMutate
     private let options = ["0", "1"]
-
-    init(license: LicenseDataMutate, isPresented: Binding<Bool>) {
-        self._license = State(initialValue: license)
-        self._llicnese = State(initialValue: license.license)
-        self._days = State(initialValue: license.days)
-        self._used = State(initialValue: license.used)
-        self._enabled = State(initialValue: license.enabled)
-        self._subscription = State(initialValue: license.subscription ?? 0)
-        self._isPresented = isPresented
-    }
 
     var body: some View {
         VStack {
@@ -163,10 +148,8 @@ struct EditLicenseView: View {
                     .padding()
                 Spacer()
                 Button("Update") {
-                    let newLicense = LicenseDataMutate(id: license.id, license: llicnese, days: days, used: used, enabled: enabled,
-                                                       subscription: subscription)
                     Task {
-                        await viewModel.updateLicenseById(license: newLicense)
+                        await viewModel.updateLicenseById(license: license)
                     }
                     isPresented = false
                 }
@@ -174,16 +157,16 @@ struct EditLicenseView: View {
             .padding()
             
             Form {
-                TextField("License", text: $llicnese)
+                TextField("License", text: $license.license)
                 TextField("Days", text: Binding<String>(
-                    get: { String(self.days) },
-                    set: { if let value = Int($0) { self.days = value } }
+                    get: { String(self.license.days) },
+                    set: { if let value = Int($0) { self.license.days = value } }
                 ))
 //                DropDownInputBool(label: "Used", name: "used", options: options, selectedOption: $used)
 //                    .frame(width: 200)
 //                DropDownInputBool(label: "Enabled", name: "enabled", options: options, selectedOption: $enabled)
 //                    .frame(width: 200)
-                Picker("Subscription level", selection: $subscription) {
+                Picker("Subscription level", selection: $license.subscription) {
                     ForEach(viewModel.userSubs, id: \.self) { userSub in
                         Text("\(userSub.name) (\(userSub.level))").tag(userSub.id)
                     }

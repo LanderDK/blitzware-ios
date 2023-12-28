@@ -45,7 +45,7 @@ struct UserSubsList: View {
                     UserSubRowView(userSub: userSub)
                         .contextMenu {
                             CustomButton(title: "Edit") {
-                                userSubToEdit = UserSubData(id: userSub.id, name: userSub.name, level: userSub.level, applicationId: userSub.applicationId)
+                                userSubToEdit = userSub
                                 isShowingEditSheet = true
                             }
                             CustomButton(title: "Delete") {
@@ -80,7 +80,7 @@ struct UserSubsList: View {
                 AddUserSubView(isPresented: $isShowingAddSheet)
             }
             .sheet(isPresented: $isShowingEditSheet) {
-                EditUserSubView(userSub: userSubToEdit, isPresented: $isShowingEditSheet)
+                EditUserSubView(isPresented: $isShowingEditSheet, userSub: $userSubToEdit)
             }
         }
     }
@@ -89,16 +89,7 @@ struct UserSubsList: View {
 struct EditUserSubView: View {
     @EnvironmentObject var viewModel: AppViewModel
     @Binding var isPresented: Bool
-    @State var userSub: UserSubData
-    @State var name: String
-    @State var level: Int
-
-    init(userSub: UserSubData, isPresented: Binding<Bool>) {
-        self._userSub = State(initialValue: userSub)
-        self._name = State(initialValue: userSub.name)
-        self._level = State(initialValue: userSub.level)
-        self._isPresented = isPresented
-    }
+    @Binding var userSub: UserSubData
 
     var body: some View {
         VStack {
@@ -112,21 +103,20 @@ struct EditUserSubView: View {
                     .padding()
                 Spacer()
                 Button("Update") {
-                    let newUserSub = UserSubData(id: userSub.id, name: name, level: level, applicationId: userSub.applicationId)
                     Task {
-                        await viewModel.updateUserSubById(userSub: newUserSub)
+                        await viewModel.updateUserSubById(userSub: userSub)
                     }
                     isPresented = false
                 }
             }.padding()
             Form {
-                TextField("Name", text: $name)
+                TextField("Name", text: $userSub.name)
                 HStack {
                     Text("Level")
                     Spacer()
                     TextField("Level", text: Binding<String>(
-                        get: { String(self.level) },
-                        set: { if let value = Int($0) { self.level = value } }
+                        get: { String(self.userSub.level) },
+                        set: { if let value = Int($0) { self.userSub.level = value } }
                     ))
                 }
                 

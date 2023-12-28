@@ -15,7 +15,7 @@ struct LicensesList: View {
     @State private var isShowingAddSheet = false
     @State private var isShowingEditSheet = false
     var application: ApplicationData
-    @State private var licenseToEdit: LicenseDataMutate = LicenseDataMutate(id: "", license: "", days: 0, used: 0, enabled: 0)
+    @State private var licenseToEdit: LicenseDataMutate = LicenseDataMutate(id: "", license: "", days: 0, used: 0, enabled: 0, subscription: 0)
     
     var body: some View {
         VStack {
@@ -47,13 +47,13 @@ struct LicensesList: View {
                             CustomButton(title: "Edit") {
                                 licenseToEdit = LicenseDataMutate(id: license.id, license: license.license, days: license.days,
                                                                   used: license.used, enabled: license.enabled,
-                                                                  subscription: license.userSubId)
+                                                                  subscription: license.userSubId!)
                                 isShowingEditSheet = true
                             }
                             if license.enabled == 1 {
                                 CustomButton(title: "Ban") {
                                     let newLicense = LicenseDataMutate(id: license.id, license: license.license, days: license.days,
-                                                                       used: license.used, enabled: 0, subscription: license.userSubId)
+                                                                       used: license.used, enabled: 0, subscription: license.userSubId!)
                                     Task {
                                         await viewModel.updateLicenseById(license: newLicense)
                                         if viewModel.requestState == .success {
@@ -73,7 +73,7 @@ struct LicensesList: View {
                             } else {
                                 CustomButton(title: "Unban") {
                                     let newLicense = LicenseDataMutate(id: license.id, license: license.license, days: license.days,
-                                                                       used: license.used, enabled: 1, subscription: license.userSubId)
+                                                                       used: license.used, enabled: 1, subscription: license.userSubId!)
                                     Task {
                                         await viewModel.updateLicenseById(license: newLicense)
                                         if viewModel.requestState == .success {
@@ -134,7 +134,7 @@ struct EditLicenseView: View {
     @EnvironmentObject var viewModel: AppViewModel
     @Binding var isPresented: Bool
     @Binding var license: LicenseDataMutate
-    private let options = ["0", "1"]
+    private let options = [0,1]
 
     var body: some View {
         VStack {
@@ -150,6 +150,13 @@ struct EditLicenseView: View {
                 Button("Update") {
                     Task {
                         await viewModel.updateLicenseById(license: license)
+                        if let index = viewModel.licenses.firstIndex(where: { $0.id == license.id }) {
+                            viewModel.licenses[index].license = license.license
+                            viewModel.licenses[index].days = license.days
+                            viewModel.licenses[index].used = license.used
+                            viewModel.licenses[index].enabled = license.enabled
+                            viewModel.licenses[index].userSubId = license.subscription
+                        }
                     }
                     isPresented = false
                 }
@@ -162,10 +169,16 @@ struct EditLicenseView: View {
                     get: { String(self.license.days) },
                     set: { if let value = Int($0) { self.license.days = value } }
                 ))
-//                DropDownInputBool(label: "Used", name: "used", options: options, selectedOption: $used)
-//                    .frame(width: 200)
-//                DropDownInputBool(label: "Enabled", name: "enabled", options: options, selectedOption: $enabled)
-//                    .frame(width: 200)
+                Picker("Used", selection: $license.used) {
+                    ForEach(options, id: \.self) { option in
+                        Text(option == 0 ? "False" : "True").tag(option)
+                    }
+                }.pickerStyle(MenuPickerStyle())
+                Picker("Enabled", selection: $license.enabled) {
+                    ForEach(options, id: \.self) { option in
+                        Text(option == 0 ? "False" : "True").tag(option)
+                    }
+                }.pickerStyle(MenuPickerStyle())
                 Picker("Subscription level", selection: $license.subscription) {
                     ForEach(viewModel.userSubs, id: \.self) { userSub in
                         Text("\(userSub.name) (\(userSub.level))").tag(userSub.id)
@@ -175,11 +188,6 @@ struct EditLicenseView: View {
                 
             }
         }
-//        .onDisappear(perform: {
-//            Task {
-//                await viewModel.getLicensesOfApplication(applicationId: viewModel.licenses.first(where: {$0.id == license.id})!.application.id)
-//            }
-//        })
     }
 }
 

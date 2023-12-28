@@ -7,6 +7,18 @@
 
 import SwiftUI
 
+func dateToString(from date: Date) -> String? {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+    return dateFormatter.string(from: date)
+}
+
+func stringToDate(from dateString: String) -> Date? {
+    let formatter = ISO8601DateFormatter()
+    formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+    return formatter.date(from: dateString)
+}
+
 func convertDateString(_ inputString: String) -> String? {
     let inputFormatter = DateFormatter()
     inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"

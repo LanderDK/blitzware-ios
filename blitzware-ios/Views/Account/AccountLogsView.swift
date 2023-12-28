@@ -54,7 +54,7 @@ struct LogList: View {
             }
             ScrollView {
                 ForEach(viewModel.individualAccountLogs, id: \.id) { log in
-                    LogView(action: log.action, message: log.message, date: log.dateString, onDelete: {
+                    LogView(action: log.action, message: log.message, date: log.date, onDelete: {
                         deleteLog(log.id)
                     })
                 }

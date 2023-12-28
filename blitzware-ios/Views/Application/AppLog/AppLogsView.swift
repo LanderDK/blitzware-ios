@@ -75,7 +75,7 @@ struct AppLogRowView: View {
                 Text("Date: ")
                     .font(.subheadline)
                     .fontWeight(.bold)
-                Text(convertDateString(appLog.dateString) ?? "Error date")
+                Text(convertDateString(appLog.date) ?? "Error date")
                     .font(.subheadline)
             }
             HStack {

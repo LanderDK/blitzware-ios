@@ -63,7 +63,7 @@ struct ChatList: View {
             ReverseScrollView {
                 VStack(spacing: 8) {
                     ForEach(viewModel.generalChatMsgs, id: \.id) { chatMsg in
-                        ChatMsg(username: chatMsg.username, message: chatMsg.message, date: chatMsg.dateString, onDelete: {
+                        ChatMsg(username: chatMsg.username, message: chatMsg.message, date: chatMsg.date, onDelete: {
                             deleteChatMessage(chatMsg.id)
                         })
                     }

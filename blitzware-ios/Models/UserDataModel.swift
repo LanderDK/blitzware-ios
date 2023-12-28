@@ -11,19 +11,8 @@ struct UserData: Codable, Identifiable {
     let id: String
     var username: String
     var email: String
-    
-    var expiryDateString: String
-    var expiryDate: Date {
-        let formatter = ISO8601DateFormatter()
-        return formatter.date(from: expiryDateString) ?? Date()
-    }
-    
-    var lastLoginString: String
-    var lastLogin: Date {
-        let formatter = ISO8601DateFormatter()
-        return formatter.date(from: lastLoginString) ?? Date()
-    }
-    
+    var expiryDate: String
+    var lastLogin: String
     var lastIP: String
     var hwid: String
     var license: String
@@ -36,19 +25,15 @@ struct UserData: Codable, Identifiable {
         let id: String
         let name: String
     }
-
-    enum CodingKeys: String, CodingKey {
-        case id, username, email, expiryDateString = "expiryDate", lastLoginString = "lastLogin", lastIP, hwid, license, enabled, twoFactorAuth, userSubId, application
-    }
 }
 
 struct UserDataMutate: Codable, Identifiable {
     let id: String
     var username: String
     var email: String
-    var expiryDate: Date
+    var expiryDate: String
     var hwid: String
     var twoFactorAuth: Int
     var enabled: Int
-    var subscription: Int?
+    var subscription: Int
 }

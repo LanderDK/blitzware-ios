@@ -15,7 +15,7 @@ struct UsersList: View {
     @State private var isShowingAddSheet = false
     @State private var isShowingEditSheet = false
     var application: ApplicationData
-    @State private var userToEdit: UserDataMutate = UserDataMutate(id: "", username: "", email: "", expiryDate: Date(), hwid: "", twoFactorAuth: 0, enabled: 0)
+    @State private var userToEdit: UserDataMutate = UserDataMutate(id: "", username: "", email: "", expiryDate: "", hwid: "", twoFactorAuth: 0, enabled: 0, subscription: 0)
     
     var body: some View {
         VStack {
@@ -45,12 +45,12 @@ struct UsersList: View {
                     UserRowView(user: user)
                         .contextMenu {
                             CustomButton(title: "Edit") {
-                                userToEdit = UserDataMutate(id: user.id, username: user.username, email: user.email, expiryDate: user.expiryDate, hwid: user.hwid, twoFactorAuth: user.twoFactorAuth, enabled: user.enabled, subscription: user.userSubId)
+                                userToEdit = UserDataMutate(id: user.id, username: user.username, email: user.email, expiryDate: user.expiryDate, hwid: user.hwid, twoFactorAuth: user.twoFactorAuth, enabled: user.enabled, subscription: user.userSubId!)
                                 isShowingEditSheet = true
                             }
                             
                             CustomButton(title: "Reset HWID") {
-                                let newUser = UserDataMutate(id: user.id, username: user.username, email: user.email, expiryDate: user.expiryDate, hwid: "RESET", twoFactorAuth: user.twoFactorAuth, enabled: user.enabled, subscription: user.userSubId)
+                                let newUser = UserDataMutate(id: user.id, username: user.username, email: user.email, expiryDate: user.expiryDate, hwid: "RESET", twoFactorAuth: user.twoFactorAuth, enabled: user.enabled, subscription: user.userSubId!)
                                 Task {
                                     await viewModel.updateUserById(user: newUser)
                                     if viewModel.requestState == .success {
@@ -69,7 +69,7 @@ struct UsersList: View {
                             }
                             if user.enabled == 1 {
                                 CustomButton(title: "Ban") {
-                                    let newUser = UserDataMutate(id: user.id, username: user.username, email: user.email, expiryDate: user.expiryDate, hwid: user.hwid, twoFactorAuth: user.twoFactorAuth, enabled: 0, subscription: user.userSubId)
+                                    let newUser = UserDataMutate(id: user.id, username: user.username, email: user.email, expiryDate: user.expiryDate, hwid: user.hwid, twoFactorAuth: user.twoFactorAuth, enabled: 0, subscription: user.userSubId!)
                                     Task {
                                         await viewModel.updateUserById(user: newUser)
                                         if viewModel.requestState == .success {
@@ -88,7 +88,7 @@ struct UsersList: View {
                                 }
                             } else {
                                 CustomButton(title: "Unban") {
-                                    let newUser = UserDataMutate(id: user.id, username: user.username, email: user.email, expiryDate: user.expiryDate, hwid: "RESET", twoFactorAuth: user.twoFactorAuth, enabled: 1, subscription: user.userSubId)
+                                    let newUser = UserDataMutate(id: user.id, username: user.username, email: user.email, expiryDate: user.expiryDate, hwid: user.hwid, twoFactorAuth: user.twoFactorAuth, enabled: 1, subscription: user.userSubId!)
                                     Task {
                                         await viewModel.updateUserById(user: newUser)
                                         if viewModel.requestState == .success {
@@ -149,7 +149,8 @@ struct EditUserView: View {
     @EnvironmentObject var viewModel: AppViewModel
     @Binding var isPresented: Bool
     @Binding var user: UserDataMutate
-    private let options = ["0", "1"]
+    private let options = [0,1]
+    @State private var date = Date()
 
     var body: some View {
         VStack {
@@ -164,7 +165,18 @@ struct EditUserView: View {
                 Spacer()
                 Button("Update") {
                     Task {
+                        let dateString = dateToString(from: date) ?? "Invalid date"
+                        user.expiryDate = dateString
                         await viewModel.updateUserById(user: user)
+                        if let index = viewModel.users.firstIndex(where: { $0.id == user.id }) {
+                            viewModel.users[index].username = user.username
+                            viewModel.users[index].email = user.email
+                            viewModel.users[index].expiryDate = user.expiryDate
+                            viewModel.users[index].hwid = user.hwid
+                            viewModel.users[index].twoFactorAuth = user.twoFactorAuth
+                            viewModel.users[index].enabled = user.enabled
+                            viewModel.users[index].userSubId = user.subscription
+                        }
                     }
                     isPresented = false
                 }
@@ -172,27 +184,29 @@ struct EditUserView: View {
             Form {
                 TextField("Username", text: $user.username)
                 TextField("Email", text: $user.email)
-                DatePicker("Expiry date", selection: $user.expiryDate, displayedComponents: [.date, .hourAndMinute])
+                DatePicker("Expiry date", selection: $date, displayedComponents: [.date, .hourAndMinute])
                     .datePickerStyle(DefaultDatePickerStyle())
+                    .onAppear {
+                        date = stringToDate(from: user.expiryDate) ?? date
+                    }
                 TextField("Hardware-ID", text: $user.hwid)
-//                DropDownInputBool(label: "2FA", name: "twoFactorAuth", options: options, selectedOption: $twoFactorAuth)
-//                    .frame(width: 200)
-//                DropDownInputBool(label: "Enabled", name: "enabled", options: options, selectedOption: $enabled)
-//                    .frame(width: 200)
+                Picker("2FA", selection: $user.twoFactorAuth) {
+                    ForEach(options, id: \.self) { option in
+                        Text(option == 0 ? "False" : "True").tag(option)
+                    }
+                }.pickerStyle(MenuPickerStyle())
+                Picker("Enabled", selection: $user.enabled) {
+                    ForEach(options, id: \.self) { option in
+                        Text(option == 0 ? "False" : "True").tag(option)
+                    }
+                }.pickerStyle(MenuPickerStyle())
                 Picker("Subscription level", selection: $user.subscription) {
                     ForEach(viewModel.userSubs, id: \.self) { userSub in
                         Text("\(userSub.name) (\(userSub.level))").tag(userSub.id)
                     }
-                }
-                .pickerStyle(MenuPickerStyle())
-                
+                }.pickerStyle(MenuPickerStyle())
             }
         }
-//        .onDisappear(perform: {
-//            Task {
-//                await viewModel.getUsersOfApplication(applicationId: viewModel.users.first(where: {$0.username == username})!.application.id)
-//            }
-//        })
     }
 }
 
@@ -272,7 +286,7 @@ struct UserRowView: View {
                 Text("Expiry: ")
                     .font(.subheadline)
                     .fontWeight(.bold)
-                Text(convertDateString(user.expiryDateString) ?? "Error date")
+                Text(convertDateString(user.expiryDate) ?? "Error date")
                     .font(.subheadline)
             }
             HStack {
@@ -290,7 +304,7 @@ struct UserRowView: View {
                 Text("Last Login: ")
                     .font(.subheadline)
                     .fontWeight(.bold)
-                Text(convertDateString(user.lastLoginString) ?? "Date error")
+                Text(convertDateString(user.lastLogin) ?? "Date error")
                     .font(.subheadline)
             }
             HStack {

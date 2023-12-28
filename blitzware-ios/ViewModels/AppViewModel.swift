@@ -779,11 +779,11 @@ class AppViewModel: ObservableObject {
         
         guard let url = URL(string: baseUrl + "/users/\(user.id)") else { return }
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-        let formattedDateString = dateFormatter.string(from: user.expiryDate)
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+//        let formattedDateString = dateFormatter.string(from: user.expiryDate)
         
-        let body: [String: Any] = ["username": user.username, "email": user.email, "expiryDate": formattedDateString, "hwid": user.hwid,
+        let body: [String: Any] = ["username": user.username, "email": user.email, "expiryDate": user.expiryDate, "hwid": user.hwid,
                                    "twoFactorAuth": user.twoFactorAuth, "enabled": user.enabled, "subscription": user.subscription]
         
         do {

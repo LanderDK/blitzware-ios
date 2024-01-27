@@ -234,7 +234,7 @@ struct AddUserView: View {
                 Button("Create") {
                     if !username.isEmpty && !email.isEmpty && !password.isEmpty && subscription != 0 {
                         Task {
-                            await viewModel.createUserFromDashboard(username: username, email: email, password: password, id: viewModel.applicationData!.id, expiry: expiryDate, subscription: subscription)
+                            await viewModel.createUserFromDashboard(username: username, email: email, password: password, applicationId: viewModel.applicationData!.id, expiry: expiryDate, subscription: subscription)
                         }
                         isPresented = false
                     }

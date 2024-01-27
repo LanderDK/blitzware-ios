@@ -803,7 +803,7 @@ class AppViewModel: ObservableObject {
         }
     }
     
-    func createUserFromDashboard(username: String, email: String, password: String, id: String, expiry: Date, subscription: Int) async {
+    func createUserFromDashboard(username: String, email: String, password: String, applicationId: String, expiry: Date, subscription: Int) async {
         self.errorData = nil
         self.requestState = .pending
         
@@ -813,7 +813,7 @@ class AppViewModel: ObservableObject {
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
         let formattedDateString = dateFormatter.string(from: expiry)
         
-        let body: [String: Any] = ["username": username, "email": email, "password": password, "id": id, "expiry": formattedDateString,
+        let body: [String: Any] = ["username": username, "email": email, "password": password, "applicationId": applicationId, "expiry": formattedDateString,
                                    "subscription": subscription]
         
         do {
